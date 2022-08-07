@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "CSDebug",
+	"Description": "Debug Helper",
+	"Category": "Other",
+	"CreatedBy": "sennoaki",
+	"CreatedByURL": "",
+	"DocsURL": "https://sites.google.com/view/sensyumemo/csdebug",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "CSDebug",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
