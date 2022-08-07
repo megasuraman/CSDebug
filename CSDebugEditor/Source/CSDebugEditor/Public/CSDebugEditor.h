@@ -1,4 +1,10 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2020 SensyuGames.
+/**
+ * @file CSDebugEditor.h
+ * @brief CSDebugEditor
+ * @author SensyuGames
+ * @date 2020/7/24
+ */
 
 #pragma once
 

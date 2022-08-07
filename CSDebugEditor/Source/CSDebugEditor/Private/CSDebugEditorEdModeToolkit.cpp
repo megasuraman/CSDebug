@@ -1,4 +1,10 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2020 SensyuGames.
+/**
+ * @file CSDebugEditorEdModeToolkit.cpp
+ * @brief CSDebugEditorEdModeToolkit
+ * @author SensyuGames
+ * @date 2020/7/24
+ */
 
 #include "CSDebugEditorEdModeToolkit.h"
 #include "CSDebugEditorEdMode.h"

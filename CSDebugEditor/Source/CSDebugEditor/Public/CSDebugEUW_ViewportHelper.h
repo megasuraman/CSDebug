@@ -1,4 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020 SensyuGames.
+/**
+ * @file CSDebugEUW_ViewportHelper.h
+ * @brief UObject‚ÌProperty’l•\Ž¦
+ * @author SensyuGames
+ * @date 2022/08/07
+ */
 
 #pragma once
 
