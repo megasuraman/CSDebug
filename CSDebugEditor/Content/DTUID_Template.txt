@@ -1,0 +1,42 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Containers/UnrealString.h"
+#include "***DTName***.generated.h"
+UENUM(BlueprintType)
+enum class ***EnumName*** : uint8
+{
+	Invalid=0,
+***Enum***
+	NextUID=***EnumNextUID*** UMETA(Hidden),
+};
+
+class ***DTName***Getter
+{
+public:
+	static FName sGetName(const ***EnumName*** InId)
+	{
+		static TMap<***EnumName***, FName> smUIDMap;
+		if (smUIDMap.Num() == 0)
+		{
+***GetNameMap***
+		}
+		if(const FName* FindName = smUIDMap.Find(InId))
+		{
+			return *FindName;
+		}
+		return FName();
+	}
+	static ***EnumName*** sGetUID(const FName InName)
+	{
+		static TMap<FName, ***EnumName***> smUIDMap;
+		if (smUIDMap.Num() == 0)
+		{
+***GetUIDMap***
+		}
+		if (const ***EnumName**** FindUID = smUIDMap.Find(InName))
+		{
+			return *FindUID;
+		}
+		return ***EnumName***::Invalid;
+	}
+};
