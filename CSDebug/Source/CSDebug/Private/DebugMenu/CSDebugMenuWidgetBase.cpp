@@ -284,6 +284,10 @@ void	UCSDebugMenuWidgetBase::OnPushLeft()
 	{
 		OnPushLeftBP();
 	}
+	else
+	{
+		OnPushCancel();
+	}
 }
 /**
  * @brief	‰EˆÚ“®ˆ—
@@ -293,6 +297,10 @@ void	UCSDebugMenuWidgetBase::OnPushRight()
 	if (mInputMode != ECSDebugMenuInputMode::Menu)
 	{
 		OnPushRightBP();
+	}
+	else
+	{
+		OnPushDecide();
 	}
 }
 

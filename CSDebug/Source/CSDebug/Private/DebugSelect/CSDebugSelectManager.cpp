@@ -24,7 +24,6 @@
  */
 void	UCSDebugSelectManager::Init()
 {
-#if USE_CSDEBUG
 	UCSDebugMenuManager* CSDebugMenu = UCSDebugMenuManager::Get(this);
 
 	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugSelect/"));
@@ -40,7 +39,6 @@ void	UCSDebugSelectManager::Init()
 	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/BehaviorTree"), mbShowSelectBehaviorTree);
 	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/EQS"), mbShowSelectLastEQS);
 	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/Perctption"), mbShowSelectPerception);
-#endif //USE_CSDEBUG
 }
 
 /**

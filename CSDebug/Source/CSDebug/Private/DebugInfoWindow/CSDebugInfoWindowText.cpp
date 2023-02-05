@@ -44,12 +44,16 @@ void	FCSDebugInfoWindowText::FittingWindowExtent(class UCanvas* InCanvas)
  */
 void	FCSDebugInfoWindowText::AddText(const FString& InString)
 {
-	mStringList.Push(InString);
-
 	FVector2D WindowExtent = GetWindowExtent();
-	WindowExtent.Y += mFontHeight + mHeightInterval*2.f;
-	const float StringWidth = mWidthInterval + (InString.Len() * mFontWidth);
-	WindowExtent.X = FMath::Max(WindowExtent.X, StringWidth);
+	TArray<FString> LineString;
+	InString.ParseIntoArray(LineString, TEXT("\n"));
+	for (const FString& String : LineString)
+	{
+		mStringList.Push(String);
+		WindowExtent.Y += mFontHeight + mHeightInterval * 2.f;
+		const float StringWidth = mWidthInterval + (String.Len() * mFontWidth);
+		WindowExtent.X = FMath::Max(WindowExtent.X, StringWidth);
+	}
 
 	SetWindowExtent(WindowExtent);
 }

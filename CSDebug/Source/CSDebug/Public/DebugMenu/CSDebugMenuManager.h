@@ -32,9 +32,7 @@ class CSDEBUG_API UCSDebugMenuManager : public UObject
 	virtual void BeginDestroy() override;
 	
 public:
-#if USE_CSDEBUG
 	static	UCSDebugMenuManager* Get(UObject* InOwner);
-#endif //USE_CSDEBUG
 	void	Init();
 	bool	DebugTick(float InDeltaSecond);
 	void	DebugDraw(UCanvas* InCanvas);

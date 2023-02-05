@@ -12,6 +12,7 @@
 #include "CSDebugCommand.h"
 #include "DebugSelect/CSDebugSelectManager.h"
 #include "DebugMenu/CSDebugMenuManager.h"
+#include "DebugInfoWindow/CSDebugInfoWindowManager.h"
 #include "CSDebugConfig.h"
 
 #include "Engine/Canvas.h"
@@ -24,7 +25,6 @@
  */
 void	UCSDebugSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
-#if USE_CSDEBUG
 	RequestTick(true);
 	RequestDraw(true);
 
@@ -45,17 +45,19 @@ void	UCSDebugSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		mDebugSelectManager = NewObject<UCSDebugSelectManager>(this);
 		mDebugSelectManager->Init();
 	}
-#endif //USE_CSDEBUG
+	if (mDebugInfoWindowManager == nullptr)
+	{
+		mDebugInfoWindowManager = NewObject<UCSDebugInfoWindowManager>(this);
+		mDebugInfoWindowManager->Init();
+	}
 }
 /**
  * @brief Deinitialize
  */
 void	UCSDebugSubsystem::Deinitialize()
 {
-#if USE_CSDEBUG
 	RequestTick(false);
 	RequestDraw(false);
-#endif //USE_CSDEBUG
 }
 
 /**
@@ -63,7 +65,6 @@ void	UCSDebugSubsystem::Deinitialize()
  */
 void	UCSDebugSubsystem::RequestTick(const bool bInActive)
 {
-#if USE_CSDEBUG
 	if (bInActive)
 	{
 		if (!mDebugTickHandle.IsValid())
@@ -75,7 +76,6 @@ void	UCSDebugSubsystem::RequestTick(const bool bInActive)
 	{
 		FTicker::GetCoreTicker().RemoveTicker(mDebugTickHandle);
 	}
-#endif //USE_CSDEBUG
 }
 
 /**
@@ -83,7 +83,6 @@ void	UCSDebugSubsystem::RequestTick(const bool bInActive)
  */
 void	UCSDebugSubsystem::RequestDraw(const bool bInActive)
 {
-#if USE_CSDEBUG
 	if (bInActive)
 	{
 		if (!mDebugDrawHandle.IsValid())
@@ -103,7 +102,6 @@ void	UCSDebugSubsystem::RequestDraw(const bool bInActive)
 			mDebugDrawHandle.Reset();
 		}
 	}
-#endif //USE_CSDEBUG
 }
 
 /**
@@ -111,7 +109,6 @@ void	UCSDebugSubsystem::RequestDraw(const bool bInActive)
  */
 bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
 {
-#if USE_CSDEBUG
 	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
 	if (!CSDebugConfig->mbActiveCSDebug)
 	{
@@ -130,7 +127,10 @@ bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
 	{
 		mDebugSelectManager->DebugTick(InDeltaSecond);
 	}
-#endif //USE_CSDEBUG
+	if (mDebugInfoWindowManager)
+	{
+		mDebugInfoWindowManager->DebugTick(InDeltaSecond);
+	}
 
 	return true;
 }
@@ -139,7 +139,6 @@ bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
  */
 void	UCSDebugSubsystem::DebugDraw(UCanvas* InCanvas, APlayerController* InPlayerController)
 {
-#if USE_CSDEBUG
 	if (mDebugCommand)
 	{
 		mDebugCommand->DebugDraw(InCanvas);
@@ -152,5 +151,8 @@ void	UCSDebugSubsystem::DebugDraw(UCanvas* InCanvas, APlayerController* InPlayer
 	{
 		mDebugSelectManager->DebugDraw(InCanvas);
 	}
-#endif //USE_CSDEBUG
+	if (mDebugInfoWindowManager)
+	{
+		mDebugInfoWindowManager->DebugDraw(InCanvas);
+	}
 }

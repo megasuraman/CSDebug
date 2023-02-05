@@ -20,11 +20,11 @@
  /**
   * @brief Window表示(2D座標)
   */
-void	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector2D& InPos2D) const
+FVector2D	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector2D& InPos2D) const
 {
 	if (mWindowExtent.IsZero())
 	{
-		return;
+		return FVector2D::ZeroVector;
 	}
 	float WindowNameWidth = 0.f;
 	if (mWindowName.Len() > 0)
@@ -49,36 +49,22 @@ void	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector2D& InPos2D) c
 
 	DrawAfterBackground(InCanvas, InPos2D);
 
-#if 0//CalcTextDispWidthHeight()のテスト
-	FVector2D TestPos(100.f,100.f);
-	FString TestString(TEXT("abcdefghijk"));
-	float StringWidth = 0.f;
-	float StringHeight = 0.f;
-	CalcTextDispWidthHeight(StringWidth, StringHeight, InCanvas, TestString);
-
-	DrawDebugCanvas2DLine(InCanvas, TestPos, TestPos + FVector2D(StringWidth, 0.f), FColor::Blue);
-	DrawDebugCanvas2DLine(InCanvas, TestPos, TestPos + FVector2D(0.f, StringHeight), FColor::Blue);
-	DrawDebugCanvas2DLine(InCanvas, TestPos + FVector2D(StringWidth, 0.f), TestPos + FVector2D(StringWidth, StringHeight), FColor::Blue);
-
-	FCanvasTextItem TextItem(TestPos, FText::FromString(TestString), GetUseFont(), mWindowNameColor);
-	TextItem.Scale = FVector2D(mFontScale);
-	InCanvas->DrawItem(TextItem);
-#endif
+	return WindowExtent;
 }
 
 /**
  * @brief Window表示(Windowサイズ比での2D座標)
  */
-void	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const float InPosRatioX, const float InPosRatioY) const
+FVector2D	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const float InPosRatioX, const float InPosRatioY) const
 {
-	FVector2D ScreenPos(InCanvas->ClipX * InPosRatioX, InCanvas->ClipY * InPosRatioY);
-	Draw(InCanvas, ScreenPos);
+	const FVector2D ScreenPos(InCanvas->ClipX * InPosRatioX, InCanvas->ClipY * InPosRatioY);
+	return Draw(InCanvas, ScreenPos);
 }
 
 /**
  * @brief Window表示(3D座標指定)
  */
-void	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector& InPos, const float InBorderDistance) const
+FVector2D	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector& InPos, const float InBorderDistance) const
 {
 	const FVector ProjectPos = InCanvas->Project(InPos);
 	if (ProjectPos.X < 0.f
@@ -87,11 +73,21 @@ void	FCSDebugInfoWindowBase::Draw(UCanvas* InCanvas, const FVector& InPos, const
 		|| ProjectPos.Y > InCanvas->SizeY
 		|| ProjectPos.Z <= 0.f)
 	{
-		return;
+		return FVector2D::ZeroVector;
+	}
+
+	if (InBorderDistance > 0.f)
+	{
+		const FSceneView* View = InCanvas->SceneView;
+		if (View
+			&& FVector::DistSquared(View->ViewMatrices.GetViewOrigin(), InPos) > FMath::Square(InBorderDistance))
+		{
+			return FVector2D::ZeroVector;
+		}
 	}
 
 	const FVector2D ScreenPos(ProjectPos);
-	Draw(InCanvas, ScreenPos);
+	return Draw(InCanvas, ScreenPos);
 }
 
 /**

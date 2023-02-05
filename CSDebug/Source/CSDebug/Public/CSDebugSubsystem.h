@@ -5,7 +5,6 @@
  * @author SensyuGames
  * @date 2020/7/24
  */
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,11 +14,12 @@
 class UCSDebugCommand;
 class UCSDebugSelectManager;
 class UCSDebugMenuManager;
+class UCSDebugInfoWindowManager;
 
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class CSDEBUG_API UCSDebugSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
@@ -28,11 +28,11 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
-#if USE_CSDEBUG//ビルドエラーで気づけるように封印
 	UCSDebugCommand* GetDebugCommand() const { return mDebugCommand; }
 	UCSDebugSelectManager* GetDebugSelectManager() const { return mDebugSelectManager; }
 	UCSDebugMenuManager* GetDebugMenuManager() const { return mDebugMenuManager; }
-#endif //USE_CSDEBUG
+	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
+	UCSDebugInfoWindowManager* GetDebugInfoWindowManager() const { return mDebugInfoWindowManager; }
 
 protected:
 	void	RequestTick(const bool bInActive);
@@ -48,6 +48,8 @@ protected:
 	UCSDebugSelectManager*	mDebugSelectManager = nullptr;
 	UPROPERTY(BlueprintReadOnly)
 	UCSDebugMenuManager*	mDebugMenuManager = nullptr;
+	UPROPERTY()
+	UCSDebugInfoWindowManager*	mDebugInfoWindowManager = nullptr;
 
 private:
 	TWeakObjectPtr<AActor>	mOwner;

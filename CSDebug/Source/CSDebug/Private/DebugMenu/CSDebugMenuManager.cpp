@@ -31,7 +31,6 @@ void    UCSDebugMenuManager::BeginDestroy()
     Super::BeginDestroy();
 }
 
-#if USE_CSDEBUG
 /**
  * @brief	Get
  */
@@ -41,7 +40,6 @@ UCSDebugMenuManager*	UCSDebugMenuManager::Get(UObject* InOwner)
 	UCSDebugSubsystem* CSDebugSubsystem = GameInstance->GetSubsystem<UCSDebugSubsystem>();
 	return CSDebugSubsystem->GetDebugMenuManager();
 }
-#endif //USE_CSDEBUG
 
 /**
  * @brief	Init
@@ -149,7 +147,11 @@ void	UCSDebugMenuManager::AddValueNode(const FString& InPathNode, const bool bIn
 {
 	FString Path;
 	FString NodeName;
-	InPathNode.Split(TEXT("/"), &Path, &NodeName, ESearchCase::CaseSensitive, ESearchDir::FromEnd);
+	const bool bOwnSlash = InPathNode.Split(TEXT("/"), &Path, &NodeName, ESearchCase::CaseSensitive, ESearchDir::FromEnd);
+	if (!bOwnSlash)
+	{
+		return;
+	}
 	if (FCSDebugMenuNodeValue* MenuNode = FindOrCreateMenuNode(Path))
 	{
 		FCSDebugMenuNodeValue NodeValue;

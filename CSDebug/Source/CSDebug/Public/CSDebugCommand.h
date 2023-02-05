@@ -25,7 +25,6 @@ class CSDEBUG_API UCSDebugCommand : public UObject
 
 	UCSDebugCommand();
 
-#if USE_CSDEBUG
 public:
 	void	Init();
 	bool	DebugTick(float InDeltaSecond);
@@ -55,5 +54,4 @@ private:
 	uint8	mbDebugStepRepeat : 1;//DebugStepを繰り返したいかどうか
 	uint8	mbStopMotionBlur : 1;//DebugStopとDebugCameraを併用時にモーションブラー(カメラブラー)が邪魔なのでon/offように
 	uint8	mbRequestReleaseDebugStopAfterMenu : 1;//DebugMenu終了時にDebugStop解除
-#endif //USE_CSDEBUG
 };

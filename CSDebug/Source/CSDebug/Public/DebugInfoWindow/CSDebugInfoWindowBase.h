@@ -24,9 +24,9 @@ struct CSDEBUG_API FCSDebugInfoWindowBase
     virtual ~FCSDebugInfoWindowBase(){}
 
 public:
-	void	Draw(class UCanvas* InCanvas, const FVector2D& InPos2D) const;
-	void	Draw(class UCanvas* InCanvas, const float InPosRatioX, const float InPosRatioY) const;
-    void	Draw(class UCanvas* InCanvas, const FVector& InPos, const float InBorderDistance=-1.f) const;
+	FVector2D	Draw(class UCanvas* InCanvas, const FVector2D& InPos2D) const;
+    FVector2D	Draw(class UCanvas* InCanvas, const float InPosRatioX, const float InPosRatioY) const;
+    FVector2D	Draw(class UCanvas* InCanvas, const FVector& InPos, const float InBorderDistance=-1.f) const;
 
 	virtual void    FittingWindowExtent(class UCanvas* InCanvas) {}
     void    SetWindowName(const FString& InName) { mWindowName = InName; }
@@ -34,7 +34,7 @@ public:
     void    SetWindowBackColor(const FLinearColor& InColor) { mWindowBackColor = InColor; }
     void    SetWindowFrameColor(const FLinearColor& InColor) { mWindowFrameColor = InColor; }
 
-    const FVector2D GetWindowExtent() const { return mWindowExtent; }
+    const FVector2D& GetWindowExtent() const { return mWindowExtent; }
 
 protected:
 	virtual void    DrawAfterBackground(class UCanvas* InCanvas, const FVector2D& InPos2D) const {}

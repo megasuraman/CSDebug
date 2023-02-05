@@ -34,7 +34,6 @@ void UCSDebugSelectComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-#if USE_CSDEBUG
 	if (const AActor* OwnerActor = GetOwner())
 	{
 		mDebugInfoWindow.SetWindowName(FString::Printf(TEXT("%s"), *OwnerActor->GetName()));
@@ -45,7 +44,6 @@ void UCSDebugSelectComponent::BeginPlay()
 	UCSDebugSelectManager* CSDebugSelectManager = CSDebugSubsystem->GetDebugSelectManager();
 	CSDebugSelectManager->EntryDebugSelectComponent(this);
 	mManager = CSDebugSelectManager;
-#endif //USE_CSDEBUG
 }
 
 void UCSDebugSelectComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
