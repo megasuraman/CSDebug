@@ -29,12 +29,16 @@ void	UCSDebugEUW_DTUID::GenerateDataTableUID(const UDataTable* InDataTable)
 
 	TArray<FDTUIDInfo> DTUIDInfoList;
 	GetExistDTUID(DTUIDInfoList, FilePath);
+	if (DTUIDInfoList.Num() == 0)
+	{
+		return;
+	}
 	CheckDataTableRow(DTUIDInfoList, InDataTable);
 	TMap<FString, FString> StringReplaceMap;
 	CreateStringRelacepMap(StringReplaceMap, DTUIDInfoList, DataTableName);
 
 	FString BaseFilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectPluginsDir());
-	BaseFilePath += FString(TEXT("/CSDebugEditor/Content/DTUID_Template.txt"));
+	BaseFilePath += FString(TEXT("CSDebug/Content/EUW/DTUID_Template.txt"));
 	FString NewHeaderFileString;
 	GetNewFileString(NewHeaderFileString, BaseFilePath, StringReplaceMap);
 	FFileHelper::SaveStringToFile(NewHeaderFileString, *FilePath, FFileHelper::EEncodingOptions::ForceUTF8);

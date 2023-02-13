@@ -25,9 +25,6 @@ public class CSDebugEditor : ModuleRules
 			new string[]
 			{
 				"Core",
-				"UMG",
-                "Blutility",
-				"CSDebug",
 			}
 			);
 			
@@ -42,6 +39,9 @@ public class CSDebugEditor : ModuleRules
 				"InputCore",
 				"UnrealEd",
 				"LevelEditor",
+                "UMG",
+                "Blutility",
+                "CSDebug",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

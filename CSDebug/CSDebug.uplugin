@@ -19,6 +19,11 @@
 			"Name": "CSDebug",
 			"Type": "DeveloperTool",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "CSDebugEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
