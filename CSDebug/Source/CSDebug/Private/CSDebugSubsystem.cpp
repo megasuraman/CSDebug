@@ -20,6 +20,27 @@
 #include "CanvasItem.h"
 #include "Debug/DebugDrawService.h"
 
+ /**
+  * @brief BP—p‚ÌGetter
+  */
+UCSDebugMenuManager* UCSDebugSubsystem::GetDebugMenuManagerBP() const
+{
+#if USE_CSDEBUG
+	return mGCObject.mDebugMenuManager;
+#else
+	return nullptr;
+#endif
+}
+UCSDebugInfoWindowManager* UCSDebugSubsystem::GetDebugInfoWindowManagerBP() const
+{
+#if USE_CSDEBUG
+	return mGCObject.mDebugInfoWindowManager;
+#else
+	return nullptr;
+#endif
+}
+
+#if USE_CSDEBUG
 /**
  * @brief Initialize
  */
@@ -30,25 +51,25 @@ void	UCSDebugSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	UWorld* Wold = GetWorld();
 
-	if (mDebugMenuManager == nullptr)
+	if (mGCObject.mDebugMenuManager == nullptr)
 	{
-		mDebugMenuManager = NewObject<UCSDebugMenuManager>(this);
-		mDebugMenuManager->Init();
+		mGCObject.mDebugMenuManager = NewObject<UCSDebugMenuManager>(this);
+		mGCObject.mDebugMenuManager->Init();
 	}
-	if (mDebugCommand == nullptr)
+	if (mGCObject.mDebugCommand == nullptr)
 	{
-		mDebugCommand = NewObject<UCSDebugCommand>(this);
-		mDebugCommand->Init();
+		mGCObject.mDebugCommand = NewObject<UCSDebugCommand>(this);
+		mGCObject.mDebugCommand->Init();
 	}
-	if (mDebugSelectManager == nullptr)
+	if (mGCObject.mDebugSelectManager == nullptr)
 	{
-		mDebugSelectManager = NewObject<UCSDebugSelectManager>(this);
-		mDebugSelectManager->Init();
+		mGCObject.mDebugSelectManager = NewObject<UCSDebugSelectManager>(this);
+		mGCObject.mDebugSelectManager->Init();
 	}
-	if (mDebugInfoWindowManager == nullptr)
+	if (mGCObject.mDebugInfoWindowManager == nullptr)
 	{
-		mDebugInfoWindowManager = NewObject<UCSDebugInfoWindowManager>(this);
-		mDebugInfoWindowManager->Init();
+		mGCObject.mDebugInfoWindowManager = NewObject<UCSDebugInfoWindowManager>(this);
+		mGCObject.mDebugInfoWindowManager->Init();
 	}
 }
 /**
@@ -115,21 +136,21 @@ bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
 		return true;
 	}
 
-	if (mDebugCommand)
+	if (mGCObject.mDebugCommand)
 	{
-		mDebugCommand->DebugTick(InDeltaSecond);
+		mGCObject.mDebugCommand->DebugTick(InDeltaSecond);
 	}
-	if (mDebugMenuManager)
+	if (mGCObject.mDebugMenuManager)
 	{
-		mDebugMenuManager->DebugTick(InDeltaSecond);
+		mGCObject.mDebugMenuManager->DebugTick(InDeltaSecond);
 	}
-	if (mDebugSelectManager)
+	if (mGCObject.mDebugSelectManager)
 	{
-		mDebugSelectManager->DebugTick(InDeltaSecond);
+		mGCObject.mDebugSelectManager->DebugTick(InDeltaSecond);
 	}
-	if (mDebugInfoWindowManager)
+	if (mGCObject.mDebugInfoWindowManager)
 	{
-		mDebugInfoWindowManager->DebugTick(InDeltaSecond);
+		mGCObject.mDebugInfoWindowManager->DebugTick(InDeltaSecond);
 	}
 
 	return true;
@@ -139,20 +160,21 @@ bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
  */
 void	UCSDebugSubsystem::DebugDraw(UCanvas* InCanvas, APlayerController* InPlayerController)
 {
-	if (mDebugCommand)
+	if (mGCObject.mDebugCommand)
 	{
-		mDebugCommand->DebugDraw(InCanvas);
+		mGCObject.mDebugCommand->DebugDraw(InCanvas);
 	}
-	if (mDebugMenuManager)
+	if (mGCObject.mDebugMenuManager)
 	{
-		mDebugMenuManager->DebugDraw(InCanvas);
+		mGCObject.mDebugMenuManager->DebugDraw(InCanvas);
 	}
-	if (mDebugSelectManager)
+	if (mGCObject.mDebugSelectManager)
 	{
-		mDebugSelectManager->DebugDraw(InCanvas);
+		mGCObject.mDebugSelectManager->DebugDraw(InCanvas);
 	}
-	if (mDebugInfoWindowManager)
+	if (mGCObject.mDebugInfoWindowManager)
 	{
-		mDebugInfoWindowManager->DebugDraw(InCanvas);
+		mGCObject.mDebugInfoWindowManager->DebugDraw(InCanvas);
 	}
 }
+#endif

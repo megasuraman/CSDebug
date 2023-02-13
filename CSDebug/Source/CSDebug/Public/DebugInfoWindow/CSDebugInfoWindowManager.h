@@ -31,9 +31,13 @@ class CSDEBUG_API UCSDebugInfoWindowManager : public UObject
 {
 	GENERATED_BODY()
 
+public:
 	UCSDebugInfoWindowManager();
-	virtual void BeginDestroy() override;
 
+	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
+	void	AddWindowBP(const FName InTag, const FText InMessage, const AActor* InFollowActor, float InDispTime);
+
+#if USE_CSDEBUG
 public:
 	static	UCSDebugInfoWindowManager* Get(UObject* InOwner);
 	void	Init();
@@ -41,8 +45,7 @@ public:
 	void	DebugDraw(UCanvas* InCanvas);
 
 	void	AddWindow(const FName InTag, const FString& InMessage, const AActor* InFollowActor=nullptr, const FCSDebugInfoWindowOption& InOption= FCSDebugInfoWindowOption());
-	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
-	void	AddWindowBP(const FName InTag, const FText InMessage, const AActor* InFollowActor, float InDispTime);
+
 protected:
 	void	OnAddWindow(const FName InTag, const FString& InMessage, const AActor* InFollowActor, const FCSDebugInfoWindowOption& InOption);
 
@@ -60,4 +63,5 @@ private:
 		bool	mbActive = false;
 	};
 	TArray<FTempWindowData>	mTempWindowDataList;
+#endif//USE_CSDEBUG
 };

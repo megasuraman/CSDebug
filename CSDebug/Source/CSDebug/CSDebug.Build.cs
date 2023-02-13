@@ -55,5 +55,15 @@ public class CSDebug : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-    }
+			
+
+		if (Target.Configuration != UnrealTargetConfiguration.Shipping)
+		{
+			PublicDefinitions.Add("USE_CSDEBUG=1");
+		}
+		else
+		{
+			PublicDefinitions.Add("USE_CSDEBUG=0");
+		}
+	}
 }

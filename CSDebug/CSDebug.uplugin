@@ -17,7 +17,7 @@
 	"Modules": [
 		{
 			"Name": "CSDebug",
-			"Type": "DeveloperTool",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{

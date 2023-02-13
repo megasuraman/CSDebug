@@ -25,14 +25,20 @@ class CSDEBUG_API UCSDebugSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
+	UCSDebugMenuManager* GetDebugMenuManagerBP() const;
+	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
+	UCSDebugInfoWindowManager* GetDebugInfoWindowManagerBP() const;
+
+#if USE_CSDEBUG
+public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
-	UCSDebugCommand* GetDebugCommand() const { return mDebugCommand; }
-	UCSDebugSelectManager* GetDebugSelectManager() const { return mDebugSelectManager; }
-	UCSDebugMenuManager* GetDebugMenuManager() const { return mDebugMenuManager; }
-	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
-	UCSDebugInfoWindowManager* GetDebugInfoWindowManager() const { return mDebugInfoWindowManager; }
+	UCSDebugCommand* GetDebugCommand() const { return mGCObject.mDebugCommand; }
+	UCSDebugSelectManager* GetDebugSelectManager() const { return mGCObject.mDebugSelectManager; }
+	UCSDebugMenuManager* GetDebugMenuManager() const { return mGCObject.mDebugMenuManager; }
+	UCSDebugInfoWindowManager* GetDebugInfoWindowManager() const { return mGCObject.mDebugInfoWindowManager; }
 
 protected:
 	void	RequestTick(const bool bInActive);
@@ -42,17 +48,25 @@ protected:
 	void	DebugDraw(class UCanvas* InCanvas, class APlayerController* InPlayerController);
 
 protected:
-	UPROPERTY()
-	UCSDebugCommand*	mDebugCommand = nullptr;
-	UPROPERTY()
-	UCSDebugSelectManager*	mDebugSelectManager = nullptr;
-	UPROPERTY(BlueprintReadOnly)
-	UCSDebugMenuManager*	mDebugMenuManager = nullptr;
-	UPROPERTY()
-	UCSDebugInfoWindowManager*	mDebugInfoWindowManager = nullptr;
+	struct FGCObjectCSDebug : public FGCObject
+	{
+		UCSDebugCommand* mDebugCommand = nullptr;
+		UCSDebugSelectManager* mDebugSelectManager = nullptr;
+		UCSDebugMenuManager* mDebugMenuManager = nullptr;
+		UCSDebugInfoWindowManager* mDebugInfoWindowManager = nullptr;
+		virtual void AddReferencedObjects(FReferenceCollector& Collector) override
+		{
+			Collector.AddReferencedObject(mDebugCommand);
+			Collector.AddReferencedObject(mDebugSelectManager);
+			Collector.AddReferencedObject(mDebugMenuManager);
+			Collector.AddReferencedObject(mDebugInfoWindowManager);
+		}
+	};
+	FGCObjectCSDebug	mGCObject;
 
 private:
 	TWeakObjectPtr<AActor>	mOwner;
 	FDelegateHandle	mDebugTickHandle;
 	FDelegateHandle	mDebugDrawHandle;
+#endif//USE_CSDEBUG
 };

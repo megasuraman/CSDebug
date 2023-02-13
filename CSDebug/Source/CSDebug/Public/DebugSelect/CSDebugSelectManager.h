@@ -23,6 +23,7 @@ class CSDEBUG_API UCSDebugSelectManager : public UObject
 {
 	GENERATED_BODY()
 
+#if USE_CSDEBUG
 public:
 	void	Init();
 	bool	DebugTick(float InDeltaSecond);
@@ -60,4 +61,6 @@ private:
 	bool	mbShowSelectLastEQS = false;
 	bool	mbShowSelectBehaviorTree = false;
 	bool	mbShowSelectPerception = false;
+
+#endif//USE_CSDEBUG
 };

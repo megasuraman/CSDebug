@@ -14,14 +14,24 @@
 
 UCSDebugInfoWindowManager::UCSDebugInfoWindowManager()
 {
+#if USE_CSDEBUG
 	mTempWindowDataList.Reserve(32);
+#endif//USE_CSDEBUG
 }
 
-void    UCSDebugInfoWindowManager::BeginDestroy()
+/**
+ * @brief	Window’Ç‰Á
+ */
+void	UCSDebugInfoWindowManager::AddWindowBP(const FName InTag, const FText InMessage, const AActor* InFollowActor, float InDispTime)
 {
-	Super::BeginDestroy();
+#if USE_CSDEBUG
+	FCSDebugInfoWindowOption Option;
+	Option.mDispTime = InDispTime;
+	OnAddWindow(InTag, InMessage.ToString(), InFollowActor, Option);
+#endif//USE_CSDEBUG
 }
 
+#if USE_CSDEBUG
 /**
  * @brief	Get
  */
@@ -62,12 +72,6 @@ void	UCSDebugInfoWindowManager::DebugDraw(UCanvas* InCanvas)
 void	UCSDebugInfoWindowManager::AddWindow(const FName InTag, const FString& InMessage, const AActor* InFollowActor, const FCSDebugInfoWindowOption& InOption)
 {
 	OnAddWindow(InTag, InMessage, InFollowActor, InOption);
-}
-void	UCSDebugInfoWindowManager::AddWindowBP(const FName InTag, const FText InMessage, const AActor* InFollowActor, float InDispTime)
-{
-	FCSDebugInfoWindowOption Option;
-	Option.mDispTime = InDispTime;
-	OnAddWindow(InTag, InMessage.ToString(), InFollowActor, Option);
 }
 /**
  * @brief	Window’Ç‰Á
@@ -147,3 +151,5 @@ void UCSDebugInfoWindowManager::DrawWindow(UCanvas* InCanvas)
 		}
 	}
 }
+
+#endif//USE_CSDEBUG

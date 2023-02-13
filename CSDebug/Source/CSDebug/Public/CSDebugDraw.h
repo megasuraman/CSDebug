@@ -22,7 +22,8 @@ UCLASS()
 class CSDEBUG_API UCSDebugDraw : public UObject
 {
 	GENERATED_BODY()
-	
+
+#if USE_CSDEBUG
 public:
 	static void DrawOctahedronArrow(UWorld* InWorld, const FVector& InBasePos, const FVector& InTargetPos, const float InRadius, const FColor InColor, float InCenterRatio=0.25f, float InLifeTime = -1.f, const uint8 InDepthPriority = 0, const float InThickness = 0.f);
 	
@@ -31,4 +32,6 @@ public:
 
 	static void DrawCanvasQuadrangle(UCanvas* InCanvas, const FVector2D& InCenterPos, const FVector2D& InExtent, const FLinearColor InColor);
 	static void DrawCanvasQuadrangle(UCanvas* InCanvas, const FVector& InPos, const FVector2D& InExtent, const FLinearColor InColor);
+
+#endif//USE_CSDEBUG
 };

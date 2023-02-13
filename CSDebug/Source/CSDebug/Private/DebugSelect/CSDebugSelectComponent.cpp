@@ -18,8 +18,10 @@
 
 // Sets default values for this component's properties
 UCSDebugSelectComponent::UCSDebugSelectComponent()
+#if USE_CSDEBUG
 	:mbSelect(false)
 	,mbUsePreDrawDelegate(false)
+#endif//USE_CSDEBUG
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -29,6 +31,7 @@ UCSDebugSelectComponent::UCSDebugSelectComponent()
 }
 
 
+#if USE_CSDEBUG
 // Called when the game starts
 void UCSDebugSelectComponent::BeginPlay()
 {
@@ -39,11 +42,13 @@ void UCSDebugSelectComponent::BeginPlay()
 		mDebugInfoWindow.SetWindowName(FString::Printf(TEXT("%s"), *OwnerActor->GetName()));
 	}
 
+#if USE_CSDEBUG
 	UGameInstance* GameInstance = GetWorld()->GetGameInstance();
 	UCSDebugSubsystem* CSDebugSubsystem = GameInstance->GetSubsystem<UCSDebugSubsystem>();
 	UCSDebugSelectManager* CSDebugSelectManager = CSDebugSubsystem->GetDebugSelectManager();
 	CSDebugSelectManager->EntryDebugSelectComponent(this);
 	mManager = CSDebugSelectManager;
+#endif
 }
 
 void UCSDebugSelectComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -124,3 +129,4 @@ void	UCSDebugSelectComponent::DrawMark(UCanvas* InCanvas) const
 	const FVector2D ExtentV(5.f, 5.f);
 	UCSDebugDraw::DrawCanvasQuadrangle(InCanvas, OwnerPos, ExtentV, GetMyColor());
 }
+#endif//USE_CSDEBUG

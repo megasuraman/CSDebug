@@ -18,14 +18,17 @@
 #include "Engine/DebugCameraController.h"
 
 UCSDebugCommand::UCSDebugCommand()
+#if USE_CSDEBUG
     :mbDebugStopMode(false)
 	, mbDebugCameraMode(false)
 	, mbDebugStop(false)
 	, mbDebugStep(false)
 	, mbDebugStepRepeat(false)
 	, mbStopMotionBlur(false)
+#endif//USE_CSDEBUG
 {}
 
+#if USE_CSDEBUG
 /**
  * @brief	Init
  */
@@ -279,3 +282,5 @@ void	UCSDebugCommand::SetStopMotionBlur(bool bInStop, APlayerController* InPlaye
     mbStopMotionBlur = bInStop;
     InPlayerController->ConsoleCommand(FString(TEXT("Show MotionBlur")));
 }
+
+#endif//USE_CSDEBUG

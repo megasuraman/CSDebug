@@ -36,9 +36,13 @@ void    UCSDebugMenuManager::BeginDestroy()
  */
 UCSDebugMenuManager*	UCSDebugMenuManager::Get(UObject* InOwner)
 {
+#if USE_CSDEBUG
 	UGameInstance* GameInstance = InOwner->GetWorld()->GetGameInstance();
 	UCSDebugSubsystem* CSDebugSubsystem = GameInstance->GetSubsystem<UCSDebugSubsystem>();
 	return CSDebugSubsystem->GetDebugMenuManager();
+#else
+	return nullptr;
+#endif//USE_CSDEBUG
 }
 
 /**

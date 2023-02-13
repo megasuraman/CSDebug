@@ -21,6 +21,7 @@
 #include "EnvironmentQuery/Items/EnvQueryItemType_VectorBase.h"
 #include "EnvironmentQuery/EnvQueryDebugHelpers.h"
 
+#if USE_CSDEBUG
 /**
  * @brief	8–Ê‘Ì•—–îˆó•\Ž¦
  */
@@ -357,3 +358,5 @@ void	UCSDebugDraw::DrawCanvasQuadrangle(UCanvas* InCanvas, const FVector& InPos,
 	const FVector2D ScreenPos(ProjectPos);
 	UCSDebugDraw::DrawCanvasQuadrangle(InCanvas, ScreenPos, InExtent, InColor);
 }
+
+#endif//USE_CSDEBUG

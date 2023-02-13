@@ -19,6 +19,7 @@
 #include "Engine/Canvas.h"
 #include "CanvasItem.h"
 
+#if USE_CSDEBUG
 /**
  * @brief	Init
  */
@@ -316,3 +317,5 @@ void	UCSDebugSelectManager::OnSetOnlyUpdateSelectActor(const FCSDebugMenuNodeGet
 		}
 	}
 }
+
+#endif//USE_CSDEBUG
