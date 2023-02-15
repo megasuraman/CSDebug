@@ -24,25 +24,54 @@ class CSDEBUG_API UCSDebugMath : public UObject
 	GENERATED_BODY()
 	
 public:
-	/* ------------------------------------------------------------
-	   !3次式の単純な補間関数(FMath::InterpEaseInOut<float>(0, 1, InRatio, 2.0)に近い)
-	------------------------------------------------------------ */
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "CSDebugMath")
-	static float CalcSimpleEaseInOut(float InRatio)
-	{
-		InRatio = FMath::Clamp(InRatio, 0.f, 1.f);
-		return (3.f - 2.f * InRatio) * FMath::Square(InRatio);
-	}
-	/* ------------------------------------------------------------
-	   !PosA-PosB, PosB-PosCによる2次ベジェ曲線の座標取得(PosBが制御点)
-	------------------------------------------------------------ */
-	static FVector CalcQuadraticBezier(const FVector& InPosA, const FVector& InPosB, const FVector& InPosC, float InRatio)
-	{
-		const FVector PosAB = FMath::Lerp(InPosA, InPosB, InRatio);
-		const FVector PosBC = FMath::Lerp(InPosB, InPosC, InRatio);
-		const FVector PosABBC = FMath::Lerp(PosAB, PosBC, InRatio);
-		return PosABBC;
-	}
+	static float CalcSimpleEaseInOut(float InRatio);
+	
+	static FVector CalcQuadraticBezier(const FVector& InPosA, const FVector& InPosB, const FVector& InPosC, float InRatio);
 
+	struct FCapsule
+	{
+		FVector mPos = FVector::ZeroVector;
+		FRotator mRot = FRotator::ZeroRotator;
+		float	mHalfHeight = 100.f;
+		float	mRadius = 50.f;
+		FCapsule() {};
+		FCapsule(const FVector& InPos, const FRotator& InRot, const float InHalfHeight, const float InRadius)
+			:mPos(InPos)
+			, mRot(InRot)
+			, mHalfHeight(InHalfHeight)
+			, mRadius(InRadius)
+		{}
+		void	Draw(const UWorld* InWorld, const FColor InColor) const;
+	};
+	static bool	CapsuleCapsuleIntersection(const FCapsule& InBaseCapsule, const FCapsule& InTargetCapsule);
+
+	struct FTriangle
+	{
+		static constexpr int32 sTrianglePointNum = 3;
+		FVector	mPointList[sTrianglePointNum];
+		FTriangle()
+		{
+			mPointList[0] = FVector::ZeroVector;
+			mPointList[1] = FVector(100.f, 0.f, 0.f);
+			mPointList[2] = FVector(0.f, 100.f, 0.f);
+		};
+		FTriangle(const FVector& InA, const FVector& InB, const FVector& InC)
+		{
+			mPointList[0] = InA;
+			mPointList[1] = InB;
+			mPointList[2] = InC;
+		}
+		void	Draw(const UWorld* InWorld, const FColor InColor) const;
+	};
+	static bool	CapsuleTriangleIntersection(const FCapsule& InCapsule, const FTriangle& InTriangle);
+
+	static bool CapsuleSweepCapsuleIntersection(const FCapsule& InFixCapsule, const FCapsule& InSweepCapsuleStart, const FCapsule& InSweepCapsuleEnd);
+
+	
+
+
+
+	static FString	GetUEnumString(const TCHAR* InEnumTypeName, int32 InEnumValue);
 	static FEnvQueryInstance* FindLastEnvQueryInstance(float& OutLastTimeStamp, const APawn* InOwner);
 };
