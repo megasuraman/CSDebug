@@ -25,40 +25,161 @@
 /**
  * @brief	8面体風矢印表示
  */
-void	UCSDebugDraw::DrawOctahedronArrow(UWorld* InWorld, const FVector& InBasePos, const FVector& InTargetPos, const float InRadius, const FColor InColor, const float InCenterRatio, float InLifeTime, const uint8 InDepthPriority, const float InThickness)
+void UCSDebugDraw::OctahedronArrow::Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority, const float InThickness) const
 {
+	if (GEngine->GetNetMode(InWorld) == NM_DedicatedServer)
+	{
+		return;
+	}
+
 	ULineBatchComponent* const LineBatcher = InWorld->LineBatcher;
 	if (LineBatcher == NULL)
 	{
 		return;
 	}
 
-	const float TargetLen = FVector::Distance(InBasePos, InTargetPos);
-	const float Extent = InRadius;
-	const FVector TargetV = InTargetPos - InBasePos;
+	const float TargetLen = FVector::Distance(mBasePos, mTargetPos);
+	const float Extent = mRadius;
+	const FVector TargetV = mTargetPos - mBasePos;
 	const FRotator TargetRotator = TargetV.Rotation();
-	const float QuadCenterRatio = InCenterRatio;
-	//const FVector QuadCenterPos = FMath::Lerp(InBasePos, InTargetPos, QuadCenterRatio);
 	const uint32 QuadPosNum = 4;
 	const FVector QuadPosList[QuadPosNum] =
 	{
-		InBasePos + TargetRotator.RotateVector(FVector(TargetLen * QuadCenterRatio,Extent,Extent)),
-		InBasePos + TargetRotator.RotateVector(FVector(TargetLen * QuadCenterRatio,-Extent,Extent)),
-		InBasePos + TargetRotator.RotateVector(FVector(TargetLen * QuadCenterRatio,-Extent,-Extent)),
-		InBasePos + TargetRotator.RotateVector(FVector(TargetLen * QuadCenterRatio,Extent,-Extent)),
+		mBasePos + TargetRotator.RotateVector(FVector(TargetLen * mQadCenterRatio,Extent,Extent)),
+		mBasePos + TargetRotator.RotateVector(FVector(TargetLen * mQadCenterRatio,-Extent,Extent)),
+		mBasePos + TargetRotator.RotateVector(FVector(TargetLen * mQadCenterRatio,-Extent,-Extent)),
+		mBasePos + TargetRotator.RotateVector(FVector(TargetLen * mQadCenterRatio,Extent,-Extent)),
 	};
 
 	for (int32 i = 0; i < QuadPosNum; ++i)
 	{
-		LineBatcher->DrawLine(InTargetPos, QuadPosList[i], InColor, InDepthPriority, InThickness, InLifeTime);
+		LineBatcher->DrawLine(mTargetPos, QuadPosList[i], InColor, InDepthPriority, InThickness);
 	}
 	for (int32 i = 0; i < QuadPosNum; ++i)
 	{
-		LineBatcher->DrawLine(InBasePos, QuadPosList[i], InColor, InDepthPriority, InThickness, InLifeTime);
+		LineBatcher->DrawLine(mBasePos, QuadPosList[i], InColor, InDepthPriority, InThickness);
 	}
 	for (int32 i = 0; i < QuadPosNum; ++i)
 	{
-		LineBatcher->DrawLine(QuadPosList[i], QuadPosList[(i + 1) % QuadPosNum], InColor, InDepthPriority, InThickness, InLifeTime);
+		LineBatcher->DrawLine(QuadPosList[i], QuadPosList[(i + 1) % QuadPosNum], InColor, InDepthPriority, InThickness);
+	}
+}
+
+/**
+ * @brief	扇形表示
+ */
+void	UCSDebugDraw::FanShape::Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority, const float InThickness) const
+{
+	if (mEdgePointNum == 0
+		|| GEngine->GetNetMode(InWorld) == NM_DedicatedServer)
+	{
+		return;
+	}
+
+	ULineBatchComponent* const LineBatcher = InWorld->LineBatcher;
+	if (LineBatcher == NULL)
+	{
+		return;
+	}
+
+	const uint32 AllPointNum = mEdgePointNum + 1;//起点分加算
+	TArray<FVector>	PointList;
+	PointList.Reserve(AllPointNum);
+	PointList.Add(mPos);
+
+	const float HalfAngle = mAngle * 0.5f;
+
+	const float AngleInterval = mAngle / (float)mEdgePointNum;
+	float PointAngle = -HalfAngle;
+	for (uint32 i = 0; i < mEdgePointNum; ++i)
+	{
+		if (i + 1 == mEdgePointNum)
+		{
+			PointAngle = HalfAngle;
+		}
+		const FRotator LocalLeftRotator(0.f, PointAngle, 0.f);
+		const FVector LocalLeftEdgeV = LocalLeftRotator.RotateVector(FVector(mRadius, 0.f, 0.f));
+		PointList.Add(mPos + mRot.RotateVector(LocalLeftEdgeV));
+		PointAngle += AngleInterval;
+	}
+
+	for (uint32 i = 0; i < AllPointNum; ++i)
+	{
+		const uint32 NextPointIndex = (i + 1) % AllPointNum;
+		LineBatcher->DrawLine(PointList[i], PointList[NextPointIndex], InColor, InDepthPriority, InThickness);
+	}
+}
+
+/**
+ * @brief	鋭角部分を削った扇形表示
+ */
+void	UCSDebugDraw::FanShapeClipTip::Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority, const float InThickness) const
+{
+	ULineBatchComponent* const LineBatcher = InWorld->LineBatcher;
+	if (mEdgePointNum == 0
+		|| GEngine->GetNetMode(InWorld) == NM_DedicatedServer
+		|| LineBatcher == NULL
+		|| mNearClipRadius >= mRadius
+		)
+	{
+		return;
+	}
+
+	if (mNearClipRadius <= 0.f)
+	{
+		FanShape::Draw(InWorld, InColor, InDepthPriority, InThickness);
+		return;
+	}
+
+	const uint32 AllPointNum = mEdgePointNum * 2;//内側と外側
+	TArray<FVector>	PointList;
+	PointList.Reserve(AllPointNum);
+
+	const float HalfAngle = mAngle * 0.5f;
+
+	const float AngleInterval = mAngle / (float)mEdgePointNum;
+	for (int32 ArcIndex = 0; ArcIndex < 2; ++ArcIndex)
+	{
+		const bool bNearArc = (ArcIndex == 1);
+		float ArcRadius = mRadius;
+		if (bNearArc)
+		{
+			ArcRadius = mNearClipRadius;
+		}
+
+		float PointAngle = -HalfAngle;
+		if (bNearArc)
+		{
+			PointAngle = HalfAngle;
+		}
+		for (uint32 i = 0; i < mEdgePointNum; ++i)
+		{
+			if (i + 1 == mEdgePointNum)
+			{
+				PointAngle = HalfAngle;
+				if (bNearArc)
+				{
+					PointAngle = -HalfAngle;
+				}
+			}
+			const FRotator LocalLeftRotator(0.f, PointAngle, 0.f);
+			const FVector LocalLeftEdgeV = LocalLeftRotator.RotateVector(FVector(ArcRadius, 0.f, 0.f));
+			PointList.Add(mPos + mRot.RotateVector(LocalLeftEdgeV));
+			if (bNearArc)
+			{
+				PointAngle -= AngleInterval;
+			}
+			else
+			{
+				PointAngle += AngleInterval;
+			}
+		}
+	}
+
+	for (uint32 i = 0; i < AllPointNum; ++i)
+	{
+		const uint32 NextPointIndex = (i + 1) % AllPointNum;
+		LineBatcher->DrawLine(PointList[i], PointList[NextPointIndex], InColor, InDepthPriority, InThickness);
 	}
 }
 
@@ -106,18 +227,20 @@ void	UCSDebugDraw::DrawPathFollowRoute(UWorld* InWorld, UCanvas* InCanvas, const
 
 	const float OctahedronRadius = 10.f;
 	const FVector OctahedronBasePosOffset(0.f, 0.f, 80.f);
-	UCSDebugDraw::DrawOctahedronArrow(World
-		, PathInstance->GetPathPoints()[CurrentPathIndex].Location + OctahedronBasePosOffset
-		, PathInstance->GetPathPoints()[CurrentPathIndex].Location
-		, OctahedronRadius
-		, PassagePathColor
-	);
-	UCSDebugDraw::DrawOctahedronArrow(World
-		, PathInstance->GetPathPoints()[NextPathIndex].Location + OctahedronBasePosOffset
-		, PathInstance->GetPathPoints()[NextPathIndex].Location
-		, OctahedronRadius
-		, PlanPathColor
-	);
+	{
+		UCSDebugDraw::OctahedronArrow CurrentPathArrow;
+		CurrentPathArrow.mBasePos = PathInstance->GetPathPoints()[CurrentPathIndex].Location + OctahedronBasePosOffset;
+		CurrentPathArrow.mTargetPos = PathInstance->GetPathPoints()[CurrentPathIndex].Location;
+		CurrentPathArrow.mRadius = OctahedronRadius;
+		CurrentPathArrow.Draw(World, PassagePathColor);
+	}
+	{
+		UCSDebugDraw::OctahedronArrow NextPathArrow;
+		NextPathArrow.mBasePos = PathInstance->GetPathPoints()[NextPathIndex].Location + OctahedronBasePosOffset;
+		NextPathArrow.mTargetPos = PathInstance->GetPathPoints()[NextPathIndex].Location;
+		NextPathArrow.mRadius = OctahedronRadius;
+		NextPathArrow.Draw(World, PlanPathColor);
+	}
 
 	if (bInShowDetail)
 	{
@@ -256,7 +379,11 @@ void	UCSDebugDraw::DrawLastEQS(UWorld* InWorld, UCanvas* InCanvas, const AAICont
 				const float NormalizedScore = bNoTestsPerformed ? 1 : (Item.Score - MinScore) * ScoreNormalizer;
 				LineColor = FColor::MakeRedToGreenColorFromScalar(NormalizedScore);
 			}
-			DrawOctahedronArrow(World, TopPos, Pos, OctahedronRadius, LineColor);
+			UCSDebugDraw::OctahedronArrow Arrow;
+			Arrow.mBasePos = TopPos;
+			Arrow.mTargetPos = Pos;
+			Arrow.mRadius = OctahedronRadius;
+			Arrow.Draw(World, LineColor);
 
 			const float Score = bNoTestsPerformed ? 1 : Item.Score;
 
@@ -305,7 +432,11 @@ void	UCSDebugDraw::DrawLastEQS(UWorld* InWorld, UCanvas* InCanvas, const AAICont
 		const FVector Pos = DefTypeOb->GetItemLocation(RawData.GetData() + DebugQueryItems[i].DataOffset);
 		const FVector TopPos = Pos + OctahedronTopOffset;
 
-		DrawOctahedronArrow(World, TopPos, Pos, OctahedronRadius, LineColor);
+		UCSDebugDraw::OctahedronArrow Arrow;
+		Arrow.mBasePos = TopPos;
+		Arrow.mTargetPos = Pos;
+		Arrow.mRadius = OctahedronRadius;
+		Arrow.Draw(World, LineColor);
 
 		FCSDebugInfoWindowText DebugInfoWindow;
 		DebugInfoWindow.AddText(FString::Printf(TEXT("pos : %s"), *Pos.ToString()));

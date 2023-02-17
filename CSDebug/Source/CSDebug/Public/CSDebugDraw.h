@@ -25,7 +25,34 @@ class CSDEBUG_API UCSDebugDraw : public UObject
 
 #if USE_CSDEBUG
 public:
-	static void DrawOctahedronArrow(UWorld* InWorld, const FVector& InBasePos, const FVector& InTargetPos, const float InRadius, const FColor InColor, float InCenterRatio=0.25f, float InLifeTime = -1.f, const uint8 InDepthPriority = 0, const float InThickness = 0.f);
+	//î™ñ ëÃñÓàÛê¸
+	struct CSDEBUG_API OctahedronArrow
+	{
+		FVector	mBasePos = FVector::ZeroVector;
+		FVector mTargetPos = FVector::ZeroVector;
+		float	mRadius = 10.f;
+		float	mQadCenterRatio = 0.25f;
+		void	Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority = 0, const float InThickness = 0.f) const;
+	};
+
+	//êÓå`
+	struct CSDEBUG_API FanShape
+	{
+		FVector mPos = FVector::ZeroVector;
+		FRotator mRot = FRotator::ZeroRotator;
+		float mRadius = 1000.f;
+		float mAngle = 45.f;
+		uint32 mEdgePointNum = 16;
+
+		virtual void	Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority = 0, const float InThickness = 0.f) const;
+	};
+	//êÊí[ÇçÌÇ¡ÇΩêÓå`
+	struct CSDEBUG_API FanShapeClipTip : public FanShape
+	{
+		float mNearClipRadius = 300.f;
+
+		virtual void	Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority = 0, const float InThickness = 0.f) const override;
+	};
 	
 	static void DrawPathFollowRoute(UWorld* InWorld, UCanvas* InCanvas, const AAIController* InAIController, const bool bInShowDetail);
 	static void DrawLastEQS(UWorld* InWorld, UCanvas* InCanvas, const AAIController* InAIController, const float InShowDetailDistance=500.f);
