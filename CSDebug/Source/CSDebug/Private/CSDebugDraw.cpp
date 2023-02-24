@@ -9,6 +9,7 @@
 
 #include "CSDebugDraw.h"
 #include "CSDebugMath.h"
+#include "CSDebugUtility.h"
 #include "DebugInfoWindow/CSDebugInfoWindowText.h"
 
 #include "Components/LineBatchComponent.h"
@@ -318,7 +319,7 @@ void	UCSDebugDraw::DrawLastEQS(UWorld* InWorld, UCanvas* InCanvas, const AAICont
 {
 #if USE_EQS_DEBUGGER
 	float TimeStamp = 0.f;
-	FEnvQueryInstance* QueryInstance = UCSDebugMath::FindLastEnvQueryInstance(TimeStamp, InAIController->GetPawn());
+	FEnvQueryInstance* QueryInstance = UCSDebugUtility::FindLastEnvQueryInstance(TimeStamp, InAIController->GetPawn());
 	if (QueryInstance == nullptr)
 	{
 		return;

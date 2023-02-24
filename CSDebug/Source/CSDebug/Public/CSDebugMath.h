@@ -67,11 +67,4 @@ public:
 	static bool	CapsuleTriangleIntersection(const FCapsule& InCapsule, const FTriangle& InTriangle);
 
 	static bool CapsuleSweepCapsuleIntersection(const FCapsule& InFixCapsule, const FCapsule& InSweepCapsuleStart, const FCapsule& InSweepCapsuleEnd);
-
-	
-
-
-
-	static FString	GetUEnumString(const TCHAR* InEnumTypeName, int32 InEnumValue);
-	static FEnvQueryInstance* FindLastEnvQueryInstance(float& OutLastTimeStamp, const APawn* InOwner);
 };

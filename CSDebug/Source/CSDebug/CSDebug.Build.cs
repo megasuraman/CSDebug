@@ -43,7 +43,8 @@ public class CSDebug : ModuleRules
 				"UMG",
 				"Json",
                 "AIModule",
-				"NavigationSystem"
+				"NavigationSystem",
+				"UnrealEd"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
