@@ -53,6 +53,9 @@ public:
 
 		virtual void	Draw(UWorld* InWorld, const FColor& InColor, const uint8 InDepthPriority = 0, const float InThickness = 0.f) const override;
 	};
+
+	static void DrawBrushMesh(const UWorld* InWorld, const ABrush* InBrush, const FColor InColor);
+	static void DrawBrushWire(const UWorld* InWorld, const ABrush* InBrush, const FColor InColor, const uint8 InDepthPriority=0, const float InThickness=0.f, const float InLifeTime=-1.f);
 	
 	static void DrawPathFollowRoute(UWorld* InWorld, UCanvas* InCanvas, const AAIController* InAIController, const bool bInShowDetail);
 	static void DrawLastEQS(UWorld* InWorld, UCanvas* InCanvas, const AAIController* InAIController, const float InShowDetailDistance=500.f);

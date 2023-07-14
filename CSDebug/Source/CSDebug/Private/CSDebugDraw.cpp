@@ -185,6 +185,67 @@ void	UCSDebugDraw::FanShapeClipTip::Draw(UWorld* InWorld, const FColor& InColor,
 }
 
 /**
+ * @brief	Brush形状のメッシュ表示
+ */
+void UCSDebugDraw::DrawBrushMesh(const UWorld* InWorld, const ABrush* InBrush, const FColor InColor)
+{
+	const FTransform Trans = InBrush->GetActorTransform();
+	const TArray<FBspNode>& Nodes = InBrush->Brush->Nodes;
+	const TArray<FVert>& Verts = InBrush->Brush->Verts;
+	const TArray<FVector>& Points = InBrush->Brush->Points;
+	for (int32 NodeIndex = 0; NodeIndex < Nodes.Num(); NodeIndex++)
+	{
+		TArray<FVector> PosList;
+		const FBspNode& Node = Nodes[NodeIndex];
+		for (uint32 VertexIndex = 0; VertexIndex < Node.NumVertices; VertexIndex++)
+		{
+			const FVert& Vert = Verts[Node.iVertPool + VertexIndex];
+			const FVector& Position = Points[Vert.pVertex];
+			const FVector WorldPos = Trans.TransformPosition(FVector(Position.X, Position.Y, Position.Z));
+			PosList.Add(WorldPos);
+		}
+		TArray<int32> IndexList;
+		IndexList.Add(0);
+		IndexList.Add(1);
+		IndexList.Add(2);
+		IndexList.Add(0);
+		IndexList.Add(2);
+		IndexList.Add(3);
+		DrawDebugMesh(InWorld, PosList, IndexList, InColor);
+	}
+}
+/**
+ * @brief	Brush形状のワイヤー表示
+ */
+void UCSDebugDraw::DrawBrushWire(const UWorld* InWorld, const ABrush* InBrush, const FColor InColor, const uint8 InDepthPriority, const float InThickness, const float InLifeTime)
+{
+	const FTransform Trans = InBrush->GetActorTransform();
+	const TArray<FBspNode>& Nodes = InBrush->Brush->Nodes;
+	const TArray<FVert>& Verts = InBrush->Brush->Verts;
+	const TArray<FVector>& Points = InBrush->Brush->Points;
+	for (int32 NodeIndex = 0; NodeIndex < Nodes.Num(); NodeIndex++)
+	{
+		TArray<FVector> PosList;
+		const FBspNode& Node = Nodes[NodeIndex];
+		for (uint32 VertexIndex = 0; VertexIndex < Node.NumVertices; VertexIndex++)
+		{
+			const FVert& Vert = Verts[Node.iVertPool + VertexIndex];
+			const FVector& Position = Points[Vert.pVertex];
+			const FVector WorldPos = Trans.TransformPosition(FVector(Position.X, Position.Y, Position.Z));
+			PosList.Add(WorldPos);
+		}
+		if (ULineBatchComponent* const LineBatch = InWorld->LineBatcher)
+		{
+			for (int32 i = 0; i < PosList.Num(); ++i)
+			{
+				const uint32 NextPointIndex = (i + 1) % PosList.Num();
+				LineBatch->DrawLine(PosList[i], PosList[NextPointIndex], InColor, InDepthPriority, InThickness, InLifeTime);
+			}
+		}
+	}
+}
+
+/**
  * @brief	PathFollowComponentの移動ルート表示
  */
 void	UCSDebugDraw::DrawPathFollowRoute(UWorld* InWorld, UCanvas* InCanvas, const AAIController* InAIController, const bool bInShowDetail)
