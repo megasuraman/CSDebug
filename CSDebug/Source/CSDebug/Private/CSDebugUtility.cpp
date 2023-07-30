@@ -77,8 +77,9 @@ FEnvQueryInstance* UCSDebugUtility::FindLastEnvQueryInstance(float& OutLastTimeS
 bool	UCSDebugUtility::IsNeedStopDebugDraw(const UWorld* InWorld)
 {
 #if WITH_EDITOR
-	if (InWorld->IsEditorWorld())
-	{//Ž©•ª‚ªEditorWorld‚Ì‚Æ‚«‚ÉGame“®‚¢‚Ä‚½‚ç•\Ž¦‚µ‚È‚¢
+	if (InWorld
+		&& InWorld->WorldType == EWorldType::Editor)
+	{//Ž©•ª‚ªEditor‚Ì‚Æ‚«‚ÉGame“®‚¢‚Ä‚½‚ç•\Ž¦‚µ‚È‚¢
 		const TIndirectArray<FWorldContext>& WorldContextList = GUnrealEd->GetWorldContexts();
 		for (auto& WorldContext : WorldContextList)
 		{

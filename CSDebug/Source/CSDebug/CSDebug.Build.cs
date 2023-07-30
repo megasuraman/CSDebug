@@ -44,7 +44,6 @@ public class CSDebug : ModuleRules
 				"Json",
                 "AIModule",
 				"NavigationSystem",
-				"UnrealEd"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
@@ -66,5 +65,15 @@ public class CSDebug : ModuleRules
 		{
 			PublicDefinitions.Add("USE_CSDEBUG=0");
 		}
+		
+		if (Target.bBuildEditor == true)
+        {
+            PrivateDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    "UnrealEd",
+                }
+                );
+        }
 	}
 }
