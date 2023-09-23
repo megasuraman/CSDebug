@@ -18,51 +18,42 @@ void FDataTableRowSelectorCustomization::CustomizeHeader(TSharedRef<IPropertyHan
 {
 	mRowNameHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FDataTableRowSelector, mRowName));
 
- 	//FString aDataTablePath("/Game/DT_Test.DT_Test");
- 	//if (UDataTable* aDataTable = LoadObject<UDataTable>(nullptr, (*aDataTablePath), nullptr, LOAD_None, nullptr))
- 	//{
- 	//	for (const FName& RowName : aDataTable->GetRowNames())
- 	//	{
- 	//		OptionTypes.Add(MakeShareable(new FString(RowName.ToString())));
- 	//	}
- 	//}
-	mDataTablePathHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FDataTableRowSelector, mDataTablePath));
- 	if (!mDataTablePathHandle.IsValid())
- 	{
- 		return;
- 	}
- 	FString DataTablePath;
- 	if (mDataTablePathHandle->GetValue(DataTablePath) != FPropertyAccess::Success)
- 	{
- 		return;
- 	}
- 
- 	if (UDataTable* aDataTable = LoadObject<UDataTable>(nullptr, (*DataTablePath), nullptr, LOAD_None, nullptr))
- 	{
- 		for (const FName& RowName : aDataTable->GetRowNames())
- 		{
- 			OptionTypes.Add(MakeShareable(new FString(RowName.ToString())));
- 		}
- 	}
+	SetupDisplayName(StructPropertyHandle);
+	SetupRowNameList(StructPropertyHandle);
 }
 
 void FDataTableRowSelectorCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle,
 	class IDetailChildrenBuilder& StructBuilder,
 	IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
-	if (OptionTypes.Num() <= 0)
+	if (mRowNameList.Num() <= 0)
 	{
 		return;
 	}
 
-	FString DispPropertyName(TEXT("DataTableRowName"));
-	if (mDataTablePathHandle.IsValid())
+	if (mRowNameHandle.IsValid())
 	{
-		FString DataTablePath;
-		if (mDataTablePathHandle->GetValue(DataTablePath) == FPropertyAccess::Success)
+		FName RowName;
+		mRowNameHandle->GetValue(RowName);
+		if (RowName.IsNone())
 		{
-			FString LeftString;
-			DataTablePath.Split(TEXT("."), &LeftString, &DispPropertyName);
+			mRowNameHandle->SetValue(*mRowNameList[0]);
+		}
+		else
+		{
+			bool bInvalidName = true;
+			for (int32 i = 0; i < mRowNameList.Num(); ++i)
+			{
+				if (*mRowNameList[i] == RowName.ToString())
+				{
+					bInvalidName = false;
+					break;
+				}
+			}
+			if (bInvalidName)
+			{
+				mRowNameHandle->SetValue(*mRowNameList[0]);
+			}
 		}
 	}
 
@@ -70,13 +61,13 @@ void FDataTableRowSelectorCustomization::CustomizeChildren(TSharedRef<class IPro
 	.NameContent()
 	[
 		SNew(STextBlock)
-		.Text(FText::Format(LOCTEXT("TypeTitle", "{DispPropertyName}"), FText::FromString(DispPropertyName)))
+		.Text(FText::Format(LOCTEXT("TypeTitle", "{0}"), FText::FromString(mPropertyTitleName)))
 	]
 	.ValueContent()
 	[
-		SAssignNew(TypeComboBox, SComboBox<TestSelectTypePtr>)
-		.OptionsSource(&OptionTypes)
-		.InitiallySelectedItem(OptionTypes[GetSelectIndex()])
+		SAssignNew(mComboBox, SComboBox<TestSelectTypePtr>)
+		.OptionsSource(&mRowNameList)
+		.InitiallySelectedItem(mRowNameList[GetSelectIndex()])
 		.OnSelectionChanged(this, &FDataTableRowSelectorCustomization::OnSelectionChanged)
 		.OnGenerateWidget(this, &FDataTableRowSelectorCustomization::OnGenerateWidget)
 		[
@@ -101,7 +92,7 @@ TSharedRef<SWidget> FDataTableRowSelectorCustomization::OnGenerateWidget(TestSel
 }
 FText FDataTableRowSelectorCustomization::GetSelectedTypeText() const
 {
-	TestSelectTypePtr SelectedType = TypeComboBox->GetSelectedItem();
+	TestSelectTypePtr SelectedType = mComboBox->GetSelectedItem();
 	return FText::FromString(*SelectedType);
 }
 int32 FDataTableRowSelectorCustomization::GetSelectIndex() const
@@ -116,14 +107,107 @@ int32 FDataTableRowSelectorCustomization::GetSelectIndex() const
 		return 0;
 	}
 
-	for (int32 i = 0; i < OptionTypes.Num(); ++i)
+	for (int32 i = 0; i < mRowNameList.Num(); ++i)
 	{
-		if (*OptionTypes[i] == RowName.ToString())
+		if (*mRowNameList[i] == RowName.ToString())
 		{
 			return i;
 		}
 	}
 	return 0;
+}
+
+void FDataTableRowSelectorCustomization::SetupDisplayName(TSharedRef<IPropertyHandle> StructPropertyHandle)
+{
+	const TSharedPtr<IPropertyHandle> DisplayNameHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FDataTableRowSelector, mDisplayName));
+	if (DisplayNameHandle.IsValid())
+	{
+		FString DisplayName;
+		if (DisplayNameHandle->GetValue(DisplayName) == FPropertyAccess::Success)
+		{
+			if (!DisplayName.IsEmpty())
+			{
+				mPropertyTitleName = DisplayName;
+			}
+		}
+	}
+}
+
+void FDataTableRowSelectorCustomization::SetupRowNameList(TSharedRef<IPropertyHandle> StructPropertyHandle)
+{
+	if (SetupRowNameListByStruct(StructPropertyHandle))
+	{
+		return;
+	}
+	SetupRowNameListByPath(StructPropertyHandle);
+}
+bool FDataTableRowSelectorCustomization::SetupRowNameListByStruct(TSharedRef<IPropertyHandle> StructPropertyHandle)
+{
+	const TSharedPtr<IPropertyHandle> DataTableStructHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FDataTableRowSelector, mDataTableStruct));
+	if (!DataTableStructHandle.IsValid())
+	{
+		return false;
+	}
+	UObject* TargetObject;
+	if (DataTableStructHandle->GetValue(TargetObject) != FPropertyAccess::Success)
+	{
+		return false;
+	}
+	const UStruct* DataTableStruct = Cast<UStruct>(TargetObject);
+	if (DataTableStruct == nullptr)
+	{
+		return false;
+	}
+
+	if (mPropertyTitleName.IsEmpty())
+	{
+		mPropertyTitleName = DataTableStruct->GetName();
+	}
+	for (TObjectIterator<UDataTable> It; It; ++It)
+	{
+		const UDataTable* DataTableAsset = *It;
+		if (DataTableAsset == nullptr)
+		{
+			continue;
+		}
+		if (DataTableAsset->RowStruct->IsChildOf(DataTableStruct))
+		{
+			for (const FName& RowName : DataTableAsset->GetRowNames())
+			{
+				mRowNameList.Add(MakeShareable(new FString(RowName.ToString())));
+			}
+		}
+	}
+	return mRowNameList.Num() > 0;
+}
+
+bool FDataTableRowSelectorCustomization::SetupRowNameListByPath(TSharedRef<IPropertyHandle> StructPropertyHandle)
+{
+	const TSharedPtr<IPropertyHandle> DataTablePathHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FDataTableRowSelector, mDataTablePath));
+	if (!DataTablePathHandle.IsValid())
+	{
+		return false;
+	}
+	FString DataTablePath;
+	if (DataTablePathHandle->GetValue(DataTablePath) != FPropertyAccess::Success)
+	{
+		return false;
+	}
+
+	if (mPropertyTitleName.IsEmpty())
+	{
+		FString LeftString;
+		DataTablePath.Split(TEXT("."), &LeftString, &mPropertyTitleName);
+	}
+
+	if (const UDataTable* DataTable = LoadObject<UDataTable>(nullptr, (*DataTablePath), nullptr, LOAD_None, nullptr))
+	{
+		for (const FName& RowName : DataTable->GetRowNames())
+		{
+			mRowNameList.Add(MakeShareable(new FString(RowName.ToString())));
+		}
+	}
+	return mRowNameList.Num() > 0;
 }
 
 #undef LOCTEXT_NAMESPACE

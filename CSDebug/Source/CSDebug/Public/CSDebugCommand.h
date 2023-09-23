@@ -32,16 +32,24 @@ public:
 	void	DebugDraw(class UCanvas* InCanvas);
 
 protected:
+	struct FSecretCommandLog
+	{
+		int32 mNextIndex = 0;
+		float mInputTime = 0.f;
+	};
+
 	APlayerController* FindPlayerController() const;
 
 	void	CheckDebugStep(APlayerController* InPlayerController, float InDeltaSecond);
 	void	CheckDebugCameraMode(APlayerController* InPlayerController);
+	void	CheckSecretCommand(APlayerController* InPlayerController);
 
 	void	SwicthDebugMenuActive(APlayerController* InPlayerController);
 	void	SetDebugStop(bool bInStop, APlayerController* InPlayerController);
 	void	SetStopMotionBlur(bool bInStop, APlayerController* InPlayerController);
 
 private:
+	TMap<FString, FSecretCommandLog> mSecretCommandLog;
 	float	mDebugStepRepeatBeginSec = 0.3f;//DebugStepRepeat”­“®‚Ü‚Å‚Ì‰Ÿ‚µ‚Á‚Ï‚È‚µŠÔ
 	float	mDebugStepRepeatBeginTimer = 0.f;//DebugStepRepeat”­“®‚Ü‚Å‚Ì‰Ÿ‚µ‚Á‚Ï‚È‚µŒv‘ªŠÔ
 	float	mDebugStepInterval = 0.f;//DebugStep‚ÅPause‰ğœŒã‚ÉÄ“x‰ğœ‚·‚é‚Ü‚Å‚ÌŠÔ

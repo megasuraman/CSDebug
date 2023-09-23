@@ -23,16 +23,21 @@ public:
 		IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
 
 
+protected:
 	using TestSelectTypePtr = TSharedPtr<FString>;
 	void OnSelectionChanged(TestSelectTypePtr Type, ESelectInfo::Type SelectionType);
 	TSharedRef<SWidget> OnGenerateWidget(TestSelectTypePtr Type);
 	FText GetSelectedTypeText() const;
 	int32 GetSelectIndex() const;
+	void SetupDisplayName(TSharedRef<IPropertyHandle> StructPropertyHandle);
+	void SetupRowNameList(TSharedRef<IPropertyHandle> StructPropertyHandle);
+	bool SetupRowNameListByStruct(TSharedRef<IPropertyHandle> StructPropertyHandle);
+	bool SetupRowNameListByPath(TSharedRef<IPropertyHandle> StructPropertyHandle);
 
 private:
 	TSharedPtr<IPropertyHandle> mRowNameHandle;
-	TSharedPtr<IPropertyHandle> mDataTablePathHandle;
 
-	TArray< TestSelectTypePtr > OptionTypes;
-	TSharedPtr< SComboBox< TestSelectTypePtr > > TypeComboBox;
+	TArray< TestSelectTypePtr > mRowNameList;
+	TSharedPtr< SComboBox< TestSelectTypePtr > > mComboBox;
+	FString mPropertyTitleName;
 };

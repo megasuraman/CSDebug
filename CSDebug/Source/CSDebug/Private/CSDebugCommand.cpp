@@ -63,6 +63,7 @@ bool	UCSDebugCommand::DebugTick(float InDeltaSecond)
 	{
 		CheckDebugStep(PlayerController, InDeltaSecond);
 		CheckDebugCameraMode(PlayerController);
+        CheckSecretCommand(PlayerController);
     }
 
 	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
@@ -211,6 +212,77 @@ void	UCSDebugCommand::CheckDebugCameraMode(APlayerController* InPlayerController
     else
 	{
 		SetStopMotionBlur(false, InPlayerController);
+    }
+}
+
+/**
+ * @brief	SecretCommandチェック
+ */
+void UCSDebugCommand::CheckSecretCommand(APlayerController* InPlayerController)
+{
+	UPlayerInput* PlayerInput = InPlayerController->PlayerInput;
+    const float NowTime = GetWorld()->TimeSeconds;
+    const bool bInputAnyKey = PlayerInput->WasJustPressed(EKeys::Gamepad_FaceButton_Bottom)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_FaceButton_Right)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_FaceButton_Left)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_FaceButton_Top)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_LeftShoulder)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_RightShoulder)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_LeftTrigger)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_RightTrigger)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_DPad_Up)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_DPad_Down)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_DPad_Right)
+		|| PlayerInput->WasJustPressed(EKeys::Gamepad_DPad_Left);
+
+	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
+    const TMap<FString, FCSDebugSecretCommand>& SecretCommand = CSDebugConfig->mDebugSecretCommand;
+    for (const auto& Element : SecretCommand)
+    {
+		bool bPossibleToRunCommand = false;
+		bool bNeedDeleteLog = false;
+        const TArray<FKey>& KeyList = Element.Value.mKeyList;
+        if (FSecretCommandLog* SecretCommandLog = mSecretCommandLog.Find(Element.Key))
+		{
+			if (PlayerInput->WasJustPressed(KeyList[SecretCommandLog->mNextIndex]))
+			{
+                SecretCommandLog->mNextIndex += 1;
+                SecretCommandLog->mInputTime = NowTime;
+				if (SecretCommandLog->mNextIndex >= KeyList.Num())
+				{
+					bPossibleToRunCommand = true;
+				}
+            }
+            else if(bInputAnyKey
+                    || NowTime - SecretCommandLog->mInputTime > 3.f )
+            {
+                bNeedDeleteLog = true;
+            }
+        }
+        else if (KeyList.Num() > 0)
+        {
+            if (PlayerInput->WasJustPressed(KeyList[0]))
+            {
+                FSecretCommandLog& NewSecretCommandLog = mSecretCommandLog.FindOrAdd(Element.Key);
+                NewSecretCommandLog.mNextIndex = 1;
+                NewSecretCommandLog.mInputTime = GetWorld()->TimeSeconds;
+                if (NewSecretCommandLog.mNextIndex >= KeyList.Num())
+                {
+                    bPossibleToRunCommand = true;
+                }
+            }
+        }
+
+        if (bPossibleToRunCommand)
+		{
+			InPlayerController->ConsoleCommand(Element.Key);
+            bNeedDeleteLog = true;
+        }
+
+        if (bNeedDeleteLog)
+        {
+            mSecretCommandLog.Remove(Element.Key);
+        }
     }
 }
 

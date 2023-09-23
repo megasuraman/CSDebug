@@ -30,12 +30,12 @@ struct FCSDebugKey
 };
 
 USTRUCT(BlueprintType)
-struct FCSDebugCode
+struct FCSDebugSecretCommand
 {
 	GENERATED_USTRUCT_BODY();
 	
 	UPROPERTY(EditAnywhere, config, Category = CSDebugCommand)
-	TArray<FKey>	mCode;
+	TArray<FKey> mKeyList;
 };
 
 /**
@@ -65,7 +65,7 @@ public:
 	FCSDebugKey	mDebugCommand_DebugCameraKey;
 
 	UPROPERTY(EditAnywhere, config, Category = CSDebugCommand)
-	TMap<FName, FCSDebugCode> mDebugCode;
+	TMap<FString, FCSDebugSecretCommand> mDebugSecretCommand;
 	
 	UPROPERTY(EditAnywhere, config, Category = CSDebugSelect)
 	FCSDebugKey	mDebugSelect_SelectKey;
