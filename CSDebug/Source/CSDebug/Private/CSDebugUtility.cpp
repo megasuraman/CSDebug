@@ -9,6 +9,8 @@
 
 #include "EnvironmentQuery/EnvQueryManager.h"
 #include "DrawDebugHelpers.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #if WITH_EDITOR
 #include "Editor.h"
@@ -70,6 +72,18 @@ FEnvQueryInstance* UCSDebugUtility::FindLastEnvQueryInstance(float& OutLastTimeS
 #endif
 }
 
+/**
+ * @brief	プレイヤーキャラクターを非表示状態で指定Actorへ憑依させる
+ */
+void UCSDebugUtility::MakeGhostPlayer(ACharacter* InPlayer, AActor* InTarget)
+{
+	FAttachmentTransformRules Rules(EAttachmentRule::KeepRelative, true);
+	InPlayer->AttachToActor(InTarget, Rules);
+
+	InPlayer->SetHidden(true);
+	InPlayer->SetActorEnableCollision(false);
+	InPlayer->GetCharacterMovement()->SetActive(false);
+}
 
 /**
  * @brief	デバッグ表示止めるべきか
@@ -91,4 +105,22 @@ bool	UCSDebugUtility::IsNeedStopDebugDraw(const UWorld* InWorld)
 	}
 #endif
 	return false;
+}
+
+FString UCSDebugUtility::GetPlaceActorLevelName(const AActor* InActor)
+{
+	if (InActor == nullptr)
+	{
+		return FString();
+	}
+	const ULevel* ActorLevel = InActor->GetLevel();
+	for (ULevelStreaming* StreamingLevel : InActor->GetWorld()->GetStreamingLevels())
+	{
+		if (StreamingLevel
+			&& StreamingLevel->GetLoadedLevel() == ActorLevel)
+		{
+			return StreamingLevel->PackageNameToLoad.ToString();
+		}
+	}
+	return FString();
 }

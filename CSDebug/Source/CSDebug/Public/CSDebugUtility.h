@@ -26,6 +26,7 @@ class CSDEBUG_API UCSDebugUtility : public UObject
 public:
 	static FString	GetUEnumString(const TCHAR* InEnumTypeName, int32 InEnumValue);
 	static FEnvQueryInstance* FindLastEnvQueryInstance(float& OutLastTimeStamp, const APawn* InOwner);
-
+	static void MakeGhostPlayer(ACharacter* InPlayer, AActor* InTarget);
 	static bool	IsNeedStopDebugDraw(const UWorld* InWorld);
+	static FString GetPlaceActorLevelName(const AActor* InActor);
 };
