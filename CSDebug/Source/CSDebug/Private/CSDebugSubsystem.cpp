@@ -11,7 +11,7 @@
 
 #include "CSDebugCommand.h"
 #include "DebugSelect/CSDebugSelectManager.h"
-#include "DebugMenu/CSDebugMenuManager.h"
+#include "DebugMenu/CSDebug_DebugMenuManager.h"
 #include "DebugInfoWindow/CSDebugInfoWindowManager.h"
 #include "CSDebugConfig.h"
 
@@ -20,17 +20,12 @@
 #include "CanvasItem.h"
 #include "Debug/DebugDrawService.h"
 
+DEFINE_LOG_CATEGORY(CSDebugLog);
+
  /**
   * @brief BP—p‚ÌGetter
   */
-UCSDebugMenuManager* UCSDebugSubsystem::GetDebugMenuManagerBP() const
-{
-#if USE_CSDEBUG
-	return mGCObject.mDebugMenuManager;
-#else
-	return nullptr;
-#endif
-}
+
 UCSDebugInfoWindowManager* UCSDebugSubsystem::GetDebugInfoWindowManagerBP() const
 {
 #if USE_CSDEBUG
@@ -53,7 +48,8 @@ void	UCSDebugSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	if (mGCObject.mDebugMenuManager == nullptr)
 	{
-		mGCObject.mDebugMenuManager = NewObject<UCSDebugMenuManager>(this);
+		const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
+		mGCObject.mDebugMenuManager = NewObject<UCSDebug_DebugMenuManager>(this, CSDebugConfig->mDebugMenuManagerClass);
 		mGCObject.mDebugMenuManager->Init();
 	}
 	if (mGCObject.mDebugCommand == nullptr)
@@ -140,13 +136,13 @@ bool	UCSDebugSubsystem::DebugTick(float InDeltaSecond)
 	{
 		mGCObject.mDebugCommand->DebugTick(InDeltaSecond);
 	}
-	if (mGCObject.mDebugMenuManager)
-	{
-		mGCObject.mDebugMenuManager->DebugTick(InDeltaSecond);
-	}
 	if (mGCObject.mDebugSelectManager)
 	{
 		mGCObject.mDebugSelectManager->DebugTick(InDeltaSecond);
+	}
+	if (mGCObject.mDebugMenuManager)
+	{
+		mGCObject.mDebugMenuManager->DebugTick(InDeltaSecond);
 	}
 	if (mGCObject.mDebugInfoWindowManager)
 	{
@@ -164,13 +160,13 @@ void	UCSDebugSubsystem::DebugDraw(UCanvas* InCanvas, APlayerController* InPlayer
 	{
 		mGCObject.mDebugCommand->DebugDraw(InCanvas);
 	}
-	if (mGCObject.mDebugMenuManager)
-	{
-		mGCObject.mDebugMenuManager->DebugDraw(InCanvas);
-	}
 	if (mGCObject.mDebugSelectManager)
 	{
 		mGCObject.mDebugSelectManager->DebugDraw(InCanvas);
+	}
+	if (mGCObject.mDebugMenuManager)
+	{
+		mGCObject.mDebugMenuManager->DebugDraw(InCanvas);
 	}
 	if (mGCObject.mDebugInfoWindowManager)
 	{

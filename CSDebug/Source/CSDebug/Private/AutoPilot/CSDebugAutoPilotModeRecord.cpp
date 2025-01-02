@@ -251,8 +251,8 @@ bool UCSDebugAutoPilotModeRecord::PlayInputRecordFile(float DeltaTime)
 		if (mPlayFrame >= InCommand.mBeginFrame
 			&& mPlayFrame <= InCommand.mEndFrame)
 		{
-			//if (Key.IsAxis1D())
-			if (Key.IsFloatAxis())
+			if (Key.IsAxis1D())
+			//if (Key.IsFloatAxis())
 			{
 				PlayerControler->InputAxis(Key, InCommand.mAxisValue, InCommand.mDeltaTime, 1, true);
 				AddDebugDrawPadInfo(FCSDebugAutoPilotDebugDrawPadInfo(KeyId, InCommand.mAxisValue));
@@ -272,8 +272,8 @@ bool UCSDebugAutoPilotModeRecord::PlayInputRecordFile(float DeltaTime)
 		}
 		else if (InCommand.mEndFrame + 1 == mPlayFrame)
 		{//‘OƒtƒŒ[ƒ€‚Åˆ—‚µ‚Ä‚½
-			//if (Key.IsAxis1D())
-			if (Key.IsFloatAxis())
+			if (Key.IsAxis1D())
+			//if (Key.IsFloatAxis())
 			{
 				//PlayerControler->InputAxis(*Key, InCommand.mAxisValue, InCommand.mDeltaTime, 1, true);
 			}
@@ -364,8 +364,8 @@ bool UCSDebugAutoPilotModeRecord::RecordingInput(float DeltaTime)
 		Temp.mDeltaTime = DeltaTime;
 		Temp.mKeyId = i;
 		bool bInput = false;
-		//if (Key.IsAxis1D())
-		if (Key.IsFloatAxis())
+		if (Key.IsAxis1D())
+		//if (Key.IsFloatAxis())
 		{
 			Temp.mAxisValue = PlayerControler->GetInputAnalogKeyState(Key);
 			const float* PadDeadZonePtr = GetPadDeadZoneMap().Find(Key);

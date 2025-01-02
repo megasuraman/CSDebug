@@ -10,8 +10,7 @@
 #include "Engine/DebugCameraController.h"
 #include "CollisionQueryParams.h"
 #include "CSDebugSubsystem.h"
-#include "DebugMenu/CSDebugMenuManager.h"
-#include "DebugMenu/CSDebugMenuNodeGetter.h"
+#include "DebugMenu/CSDebug_DebugMenuManager.h"
 #include "DebugSelect/CSDebugSelectComponent.h"
 #include "CSDebugConfig.h"
 #include "DebugInfoWindow/CSDebugInfoWindowText.h"
@@ -25,21 +24,19 @@
  */
 void	UCSDebugSelectManager::Init()
 {
-	UCSDebugMenuManager* CSDebugMenu = UCSDebugMenuManager::Get(this);
+ 	UCSDebug_DebugMenuManager* DebugMenuManager = UCSDebug_DebugMenuManager::sGet(this);
 
-	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugSelect/"));
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("Active"), mbActive);
-
-	const auto& Delegate = FCSDebugMenuNodeDelegate::CreateUObject(this, &UCSDebugSelectManager::OnSetOnlyUpdateSelectActor);
-	CSDebugMenu->AddValueNode(BaseDebugMenuPath + TEXT("UpdateOnlySelectActor"), mbOnlyUpdateSelectActor, Delegate);
-
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("Show/Info"), mbShowInfo);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("Show/Mark"), mbShowMark);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/Bone"), mbShowSelectBone);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/PathFollow"), mbShowSelectPathFollow);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/BehaviorTree"), mbShowSelectBehaviorTree);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/EQS"), mbShowSelectLastEQS);
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("ShowSelect/Perctption"), mbShowSelectPerception);
+ 	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugSelect"));
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath, FString(TEXT("Active")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath, FString(TEXT("UpdateOnlySelectActor")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("Info")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("Mark")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("Axis")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("Bone")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("PathFollow")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("LastEQS")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("BehaviorTree")), false);
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath + FString(TEXT("/Draw")), FString(TEXT("Perception")), false);
 }
 
 /**
@@ -47,6 +44,17 @@ void	UCSDebugSelectManager::Init()
  */
 bool	UCSDebugSelectManager::DebugTick(float InDeltaSecond)
 {
+	const UCSDebug_DebugMenuManager* DebugMenuManager = UCSDebug_DebugMenuManager::sGet(this);
+	mbActive = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Active")));
+	SetOnlyUpdateSelectActor(DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/UpdateOnlySelectActor"))));
+	mbShowInfo = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/Info")));
+	mbShowMark = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/Mark")));
+	mbShowSelectAxis = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/Axis")));
+	mbShowSelectBone = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/Bone")));
+	mbShowSelectPathFollow = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/PathFollow")));
+	mbShowSelectLastEQS = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/LastEQS")));
+	mbShowSelectBehaviorTree = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/BehaviorTree")));
+	mbShowSelectPerception = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugSelect/Draw/Perception")));
 	if (!mbActive)
 	{
 		return true;
@@ -169,7 +177,7 @@ void UCSDebugSelectManager::CheckSelectTarget()
 		return;
 	}
 	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
-	if (CSDebugConfig->mDebugSelect_SelectKey.IsJustPressed(PlayerInput))
+	if (CSDebugConfig->mDebugSelect_SelectKey.IsJustPressed(*PlayerInput))
 	{
 		FVector CamLoc;
 		FRotator CamRot;
@@ -300,10 +308,13 @@ void	UCSDebugSelectManager::DrawMarkAllSelectList(UCanvas* InCanvas)
 	}
 }
 
-//デバッグメニューで値変更時のコールバック
-void	UCSDebugSelectManager::OnSetOnlyUpdateSelectActor(const FCSDebugMenuNodeGetter& InGetter)
+void	UCSDebugSelectManager::SetOnlyUpdateSelectActor(const bool bInOnlyUpdate)
 {
-	mbOnlyUpdateSelectActor = InGetter.GetBool();
+	if (bInOnlyUpdate == mbOnlyUpdateSelectActor)
+	{
+		return;
+	}
+	mbOnlyUpdateSelectActor = bInOnlyUpdate;
 
 	for (TWeakObjectPtr<UCSDebugSelectComponent> WeakPtr : mAllSelectList)
 	{

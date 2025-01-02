@@ -223,8 +223,8 @@ void UCSDebugAutoPilotModeBase::InitializePadDeadZoneMap()
 		for (const FInputAxisConfigEntry& AxisConfigEntry : PlayerInput->AxisConfig)
 		{
 			const FKey AxisKey = AxisConfigEntry.AxisKeyName;
-			//if (AxisKey.IsAxis1D())
-			if (AxisKey.IsFloatAxis())
+			if (AxisKey.IsAxis1D())
+			//if (AxisKey.IsFloatAxis())
 			{
 				mPadDeadZoneMap.Add(AxisKey, AxisConfigEntry.AxisProperties.DeadZone);
 			}

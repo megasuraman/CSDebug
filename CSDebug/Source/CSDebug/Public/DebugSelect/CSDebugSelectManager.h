@@ -45,7 +45,7 @@ protected:
 	void	DrawSelectMarker(UCanvas* InCanvas);
 	void	DrawMarkAllSelectList(UCanvas* InCanvas);
 
-	void	OnSetOnlyUpdateSelectActor(const FCSDebugMenuNodeGetter& InGetter);
+	void	SetOnlyUpdateSelectActor(const bool bInOnlyUpdate);
 
 private:
 	TWeakObjectPtr<ADebugCameraController>	mDebugCameraController;

@@ -87,9 +87,9 @@ bool UCSDebug_EUW_CheckPlacedActor::CheckError_PossibleToPlaceActor()
 				}
 
 				bool bPossibleToPlace = false;
-				for (const UClass* PossibleToPlaceAcotrClass : PossibleToPlaceClassList.mClassList)
+				for (const TSoftClassPtr<AActor>& PossibleToPlaceAcotrClass : PossibleToPlaceClassList.mClassList)
 				{
-					if (Actor->IsA(PossibleToPlaceAcotrClass))
+					if (Actor->IsA(PossibleToPlaceAcotrClass.Get()))
 					{
 						bPossibleToPlace = true;
 						break;

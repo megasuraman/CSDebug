@@ -10,15 +10,16 @@
 #include "CSDebugConfig.h"
 #include "GameFramework/PlayerInput.h"
 #include "InputCoreTypes.h"
+#include "DebugMenu/CSDebug_DebugMenuManager.h"
 
 
 /**
  * @brief UPlayerInput‚ª‰Ÿ‚³‚ê‚Ä‚é‚©‚Ç‚¤‚©
  */
-bool	FCSDebugKey::IsPressed(const class UPlayerInput* InInput) const
+bool	FCSDebugKey::IsPressed(const class UPlayerInput& InInput) const
 {
-	if (InInput->IsPressed(mKeyboad)
-		|| InInput->IsPressed(mPad))
+	if (InInput.IsPressed(mKeyboad)
+		|| InInput.IsPressed(mPad))
 	{
 		return true;
 	}
@@ -28,10 +29,23 @@ bool	FCSDebugKey::IsPressed(const class UPlayerInput* InInput) const
 /**
  * @brief UPlayerInput‚ª‰Ÿ‚³‚ê‚½‚©‚Ç‚¤‚©
  */
-bool	FCSDebugKey::IsJustPressed(const class UPlayerInput* InInput) const
+bool	FCSDebugKey::IsJustPressed(const class UPlayerInput& InInput) const
 {
-	if (InInput->WasJustPressed(mKeyboad)
-		|| InInput->WasJustPressed(mPad))
+	if (InInput.WasJustPressed(mKeyboad)
+		|| InInput.WasJustPressed(mPad))
+	{
+		return true;
+	}
+	return false;
+}
+
+/**
+ * @brief UPlayerInput‚ª—£‚³‚ê‚½‚©‚Ç‚¤‚©
+ */
+bool FCSDebugKey::IsJustReleased(const class UPlayerInput& InInput) const
+{
+	if (InInput.WasJustReleased(mKeyboad)
+		|| InInput.WasJustReleased(mPad))
 	{
 		return true;
 	}
@@ -55,8 +69,7 @@ UCSDebugConfig::UCSDebugConfig()
 	mDebugSelect_SelectKey.mKeyboad = EKeys::LeftMouseButton;
 	mDebugSelect_SelectKey.mPad = EKeys::Gamepad_FaceButton_Right;
 
-	mDebugMenu_WidgetClass = TSoftClassPtr<UCSDebugMenuWidgetBase>(FSoftObjectPath(TEXT("/CSDebug/WB_DebugMenu.WB_DebugMenu_C"))).LoadSynchronous();
-	mDebugMenu_ListObjectClass = TSoftClassPtr<UCSDebugMenuListObjectBase>(FSoftObjectPath(TEXT("/CSDebug/BP_DebugMenuListObject.BP_DebugMenuListObject_C"))).LoadSynchronous();
+	mDebugMenuManagerClass = UCSDebug_DebugMenuManager::StaticClass();
 
 	mDebugMenu_SelectKey.mKeyboad = EKeys::Enter;
 	mDebugMenu_SelectKey.mPad = EKeys::Gamepad_FaceButton_Bottom;

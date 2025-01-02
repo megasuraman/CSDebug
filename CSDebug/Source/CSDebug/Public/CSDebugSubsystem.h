@@ -15,6 +15,9 @@ class UCSDebugCommand;
 class UCSDebugSelectManager;
 class UCSDebugMenuManager;
 class UCSDebugInfoWindowManager;
+class UCSDebug_DebugMenuManager;
+
+DECLARE_LOG_CATEGORY_EXTERN(CSDebugLog, Log, All);
 
 /**
  * 
@@ -25,19 +28,15 @@ class CSDEBUG_API UCSDebugSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
-	UCSDebugMenuManager* GetDebugMenuManagerBP() const;
-	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
-	UCSDebugInfoWindowManager* GetDebugInfoWindowManagerBP() const;
-
-#if USE_CSDEBUG
-public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
+	UFUNCTION(BlueprintCallable, meta = (DevelopmentOnly, Category = "CSDebug"))
+	UCSDebugInfoWindowManager* GetDebugInfoWindowManagerBP() const;
+
 	UCSDebugCommand* GetDebugCommand() const { return mGCObject.mDebugCommand; }
 	UCSDebugSelectManager* GetDebugSelectManager() const { return mGCObject.mDebugSelectManager; }
-	UCSDebugMenuManager* GetDebugMenuManager() const { return mGCObject.mDebugMenuManager; }
+	UCSDebug_DebugMenuManager* GetDebugMenuManager() const { return mGCObject.mDebugMenuManager; }
 	UCSDebugInfoWindowManager* GetDebugInfoWindowManager() const { return mGCObject.mDebugInfoWindowManager; }
 
 protected:
@@ -52,7 +51,7 @@ protected:
 	{
 		UCSDebugCommand* mDebugCommand = nullptr;
 		UCSDebugSelectManager* mDebugSelectManager = nullptr;
-		UCSDebugMenuManager* mDebugMenuManager = nullptr;
+		UCSDebug_DebugMenuManager* mDebugMenuManager = nullptr;
 		UCSDebugInfoWindowManager* mDebugInfoWindowManager = nullptr;
 		virtual void AddReferencedObjects(FReferenceCollector& Collector) override
 		{
@@ -68,5 +67,4 @@ private:
 	TWeakObjectPtr<AActor>	mOwner;
 	FDelegateHandle	mDebugTickHandle;
 	FDelegateHandle	mDebugDrawHandle;
-#endif//USE_CSDEBUG
 };

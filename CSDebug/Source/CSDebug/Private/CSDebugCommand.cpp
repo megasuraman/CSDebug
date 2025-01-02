@@ -9,8 +9,7 @@
 #include "CSDebugCommand.h"
 #include "CSDebugSubsystem.h"
 #include "CSDebugConfig.h"
-#include "DebugMenu/CSDebugMenuManager.h"
-#include "DebugMenu/CSDebugMenuNodeGetter.h"
+#include "DebugMenu/CSDebug_DebugMenuManager.h"
 
 #include "Engine/Canvas.h"
 #include "GameFramework/PlayerInput.h"
@@ -34,10 +33,10 @@ UCSDebugCommand::UCSDebugCommand()
  */
 void	UCSDebugCommand::Init()
 {
-	UCSDebugMenuManager* CSDebugMenu = UCSDebugMenuManager::Get(this);
+	UCSDebug_DebugMenuManager* DebugMenuManager = UCSDebug_DebugMenuManager::sGet(this);
 
-	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugCommand/"));
-	CSDebugMenu->AddNodePropertyBool(BaseDebugMenuPath + TEXT("DebugStopOnDebugMenu"), mbRequestDebugStopOnDebugMenu);
+	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugCommand"));
+	DebugMenuManager->AddNode_Bool(BaseDebugMenuPath, FString(TEXT("DebugStopOnDebugMenu")), false);
 }
 /**
  * @brief	Tick
@@ -57,9 +56,9 @@ bool	UCSDebugCommand::DebugTick(float InDeltaSecond)
 	}
 
 	UCSDebugSubsystem* CSDebug = Cast<UCSDebugSubsystem>(GetOuter());
-	UCSDebugMenuManager* DebugMenu = CSDebug->GetDebugMenuManager();
-    const bool bActiveDebugMenu = DebugMenu->IsActive();
-    if (!bActiveDebugMenu)
+	UCSDebug_DebugMenuManager* DebugMenuManager = CSDebug->GetDebugMenuManager();
+	mbRequestDebugStopOnDebugMenu = DebugMenuManager->GetNodeValue_Bool(FString(TEXT("CSDebug/DebugCommand/DebugStopOnDebugMenu")));
+    if (!DebugMenuManager->IsActive())
 	{
 		CheckDebugStep(PlayerController, InDeltaSecond);
 		CheckDebugCameraMode(PlayerController);
@@ -68,16 +67,16 @@ bool	UCSDebugCommand::DebugTick(float InDeltaSecond)
 
 	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
     //デバッグコマンド入力準備有効
-    if (CSDebugConfig->mDebugCommand_ReadyKey.IsPressed(PlayerInput))
+    if (CSDebugConfig->mDebugCommand_ReadyKey.IsPressed(*PlayerInput))
 	{
         //デバッグメニューon/off
-        if (CSDebugConfig->mDebugCommand_DebugMenuKey.IsJustPressed(PlayerInput))
+        if (CSDebugConfig->mDebugCommand_DebugMenuKey.IsJustPressed(*PlayerInput))
         {
             SwicthDebugMenuActive(PlayerController);
             return true;
         }
 		//デバッグストップon/off
-		else if (CSDebugConfig->mDebugCommand_DebugStopKey.IsJustPressed(PlayerInput))
+		else if (CSDebugConfig->mDebugCommand_DebugStopKey.IsJustPressed(*PlayerInput))
 		{
             mbDebugStopMode = !mbDebugStopMode;
 			SetDebugStop(mbDebugStopMode, PlayerController);
@@ -85,7 +84,7 @@ bool	UCSDebugCommand::DebugTick(float InDeltaSecond)
 			return true;
 		}
 		//デバッグカメラon/off
-		else if (CSDebugConfig->mDebugCommand_DebugCameraKey.IsJustPressed(PlayerInput))
+		else if (CSDebugConfig->mDebugCommand_DebugCameraKey.IsJustPressed(*PlayerInput))
 		{
 			PlayerController->ConsoleCommand(FString(TEXT("ToggleDebugCamera")));
 			return true;
@@ -146,7 +145,7 @@ void	UCSDebugCommand::CheckDebugStep(APlayerController* InPlayerController, floa
 	UPlayerInput* PlayerInput = InPlayerController->PlayerInput;
 	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
 
-    if (CSDebugConfig->mDebugCommand_DebugStopKey.IsPressed(PlayerInput))
+    if (CSDebugConfig->mDebugCommand_DebugStopKey.IsPressed(*PlayerInput))
     {
         if (!mbDebugStepRepeat)
 		{
@@ -177,7 +176,7 @@ void	UCSDebugCommand::CheckDebugStep(APlayerController* InPlayerController, floa
             }
 		}
     }
-    else if(CSDebugConfig->mDebugCommand_DebugStopKey.IsJustPressed(PlayerInput))
+    else if(CSDebugConfig->mDebugCommand_DebugStopKey.IsJustPressed(*PlayerInput))
     {
         if (mbDebugStop)
 		{
@@ -292,12 +291,12 @@ void UCSDebugCommand::CheckSecretCommand(APlayerController* InPlayerController)
 void	UCSDebugCommand::SwicthDebugMenuActive(APlayerController* InPlayerController)
 {
     UCSDebugSubsystem* CSDebug = Cast<UCSDebugSubsystem>(GetOuter());
-    UCSDebugMenuManager* DebugMenu = CSDebug->GetDebugMenuManager();
-    const bool bOldActiveMenu = DebugMenu->IsActive();
+    UCSDebug_DebugMenuManager* DebugMenuManager = CSDebug->GetDebugMenuManager();
+    const bool bOldActiveMenu = DebugMenuManager->IsActive();
     // On -> Off
     if (bOldActiveMenu)
     {
-        DebugMenu->SetActive(false);
+        DebugMenuManager->SetActive(false);
         if (mbRequestReleaseDebugStopAfterMenu)
         {
             SetDebugStop(false, InPlayerController);
@@ -308,7 +307,7 @@ void	UCSDebugCommand::SwicthDebugMenuActive(APlayerController* InPlayerControlle
     // Off -> On
     else
     {
-        DebugMenu->SetActive(true);
+        DebugMenuManager->SetActive(true);
         if (mbRequestDebugStopOnDebugMenu
             && !mbDebugStopMode)
         {

@@ -12,9 +12,6 @@
 #include "UObject/NoExportTypes.h"
 #include "CSDebugConfig.generated.h"
 
-class UCSDebugMenuWidgetBase;
-class UCSDebugMenuListObjectBase;
-
 USTRUCT(BlueprintType)
 struct FCSDebugKey
 {
@@ -25,8 +22,9 @@ struct FCSDebugKey
 	UPROPERTY(EditAnywhere, config, Category = CSDebugCommand)
 	FKey	mPad;
 
-	bool	IsPressed(const class UPlayerInput* InInput) const;
-	bool	IsJustPressed(const class UPlayerInput* InInput) const;
+	bool	IsPressed(const class UPlayerInput& InInput) const;
+	bool	IsJustPressed(const class UPlayerInput& InInput) const;
+	bool	IsJustReleased(const class UPlayerInput& InInput) const;
 };
 
 USTRUCT(BlueprintType)
@@ -69,11 +67,11 @@ public:
 	
 	UPROPERTY(EditAnywhere, config, Category = CSDebugSelect)
 	FCSDebugKey	mDebugSelect_SelectKey;
-	
+
 	UPROPERTY(EditAnywhere, config, Category = CSDebugMenu)
-	TSubclassOf<UCSDebugMenuWidgetBase>	mDebugMenu_WidgetClass;
+	TSubclassOf<class UCSDebug_DebugMenuManager> mDebugMenuManagerClass;
 	UPROPERTY(EditAnywhere, config, Category = CSDebugMenu)
-	TSubclassOf<UCSDebugMenuListObjectBase>	mDebugMenu_ListObjectClass;
+	TSoftObjectPtr<class UDataTable> mDebugMenuDataTable = nullptr;
 	UPROPERTY(EditAnywhere, config, Category = CSDebugMenu)
 	FCSDebugKey	mDebugMenu_SelectKey;
 	UPROPERTY(EditAnywhere, config, Category = CSDebugMenu)

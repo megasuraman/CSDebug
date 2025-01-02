@@ -18,7 +18,7 @@ struct CSDEBUGEDITOR_API FCSDebug_PlacedActorClassList
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CheckPlacedActor")
-	TArray<UClass*> mClassList;
+	TArray<TSoftClassPtr<AActor>> mClassList;
 };
 
 UCLASS()
