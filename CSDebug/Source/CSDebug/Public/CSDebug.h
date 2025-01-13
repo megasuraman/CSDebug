@@ -1,7 +1,7 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebug.h
- * @brief CSDebug‚Ìmodule
+ * @brief CSDebugâ€šÃŒmodule
  * @author SensyuGames
  * @date 2020/5/25
  */

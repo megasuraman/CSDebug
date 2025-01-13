@@ -21,8 +21,8 @@ protected:
 	virtual void DrawEditValue(UCanvas* InCanvas, const FVector2D& InPos, const FVector2D& InValueExtent) const;
 
 private:
-	static const int32 mEditDrawListNum = 9;//•\Ž¦‚·‚éƒŠƒXƒg€–Ú”
-	static const int32 mEditDrawListInitCursolOffset = mEditDrawListNum/2;//‘I‘ðƒJ[ƒ\ƒ‹‚Ì‰ŠúƒIƒtƒZƒbƒg
+	static const int32 mEditDrawListNum = 9;//è¡¨ç¤ºã™ã‚‹ãƒªã‚¹ãƒˆé …ç›®æ•°
+	static const int32 mEditDrawListInitCursolOffset = mEditDrawListNum/2;//é¸æŠžã‚«ãƒ¼ã‚½ãƒ«ã®åˆæœŸã‚ªãƒ•ã‚»ãƒƒãƒˆ
 	int32 mEditSelectIndex = 0;
 	int32 mEditDrawIndexMin = 0;
 	int32 mEditDrawIndexMax = 0;

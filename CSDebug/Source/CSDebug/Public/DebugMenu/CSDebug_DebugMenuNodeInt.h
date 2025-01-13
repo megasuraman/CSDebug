@@ -21,8 +21,8 @@ protected:
 	virtual void DrawEditValue(UCanvas* InCanvas, const FVector2D& InPos, const FVector2D& InValueExtent) const;
 
 private:
-	static const int32 mEditDigitNum = 8;//Œ…”
-	static const int32 mEditDigitIntListNum = mEditDigitNum + 1;//•„†•ª’Ç‰Á
+	static const int32 mEditDigitNum = 8;//Ã¥Ã–ÃªÃ®
+	static const int32 mEditDigitIntListNum = mEditDigitNum + 1;//Ã¯Ã‘Ã§ÃœÃ¯â„¢Ã­Â«Ã¢Â¡
 	TArray<int32> mEditDigitIntList;
-	int32 mEditDigitIntIndex = 0;//mEditDigitIntList‚Ì•ÒWˆÊ’u
+	int32 mEditDigitIntIndex = 0;//mEditDigitIntListÃ‡ÃƒÃ¯â€œÃ¨WÃ Â Ã­u
 };

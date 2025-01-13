@@ -1,7 +1,7 @@
 // Copyright 2021 SensyuGames.
 /**
  * @file CSDebugAutoPilotModeRecord.cpp
- * @brief ©“®“ü—Í ƒpƒbƒh“ü—Í‚ğ•Û‘¶,Ä¶‚·‚éƒ‚[ƒh
+ * @brief è‡ªå‹•å…¥åŠ› ãƒ‘ãƒƒãƒ‰å…¥åŠ›ã‚’ä¿å­˜,å†ç”Ÿã™ã‚‹ãƒ¢ãƒ¼ãƒ‰
  * @author SensyuGames
  * @date 2021/12/28
  */
@@ -13,7 +13,7 @@
 #include "GameFramework/Character.h"
 
 /**
- * @brief	PlayerInput‚Ìˆ—‘O
+ * @brief	PlayerInputã®å‡¦ç†å‰
  */
 void	UCSDebugAutoPilotModeRecord::PreProcessInput(float DeltaTime)
 {
@@ -26,7 +26,7 @@ void	UCSDebugAutoPilotModeRecord::PreProcessInput(float DeltaTime)
 }
 
 /**
- * @brief	PlayerInput‚Ìˆ—Œã
+ * @brief	PlayerInputã®å‡¦ç†å¾Œ
  */
 void	UCSDebugAutoPilotModeRecord::PostProcessInput(float DeltaTime)
 {
@@ -42,7 +42,7 @@ void	UCSDebugAutoPilotModeRecord::DebugDraw(class UCanvas* InCanvas)
 }
 
 /**
- * @brief	•Û‘¶‚âÄ¶“™‚Ìƒ‚[ƒhØ‘Ö
+ * @brief	ä¿å­˜ã‚„å†ç”Ÿç­‰ã®ãƒ¢ãƒ¼ãƒ‰åˆ‡æ›¿
  */
 void	UCSDebugAutoPilotModeRecord::SetMode(ECommandMode InMode)
 {
@@ -66,7 +66,7 @@ void	UCSDebugAutoPilotModeRecord::SetMode(ECommandMode InMode)
 }
 
 /**
- * @brief	Ä¶
+ * @brief	å†ç”Ÿ
  */
 void UCSDebugAutoPilotModeRecord::RequestPlayInputRecord(const FString& InFileName)
 {
@@ -89,7 +89,7 @@ bool	UCSDebugAutoPilotModeRecord::IsFinihPlay() const
 	return false;
 }
 /**
- * @brief	ƒRƒ}ƒ“ƒhû˜^ŠJnƒŠƒNƒGƒXƒg
+ * @brief	ã‚³ãƒãƒ³ãƒ‰åéŒ²é–‹å§‹ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 void UCSDebugAutoPilotModeRecord::RequestBeginRecord(const FString& InFileName)
 {
@@ -98,14 +98,14 @@ void UCSDebugAutoPilotModeRecord::RequestBeginRecord(const FString& InFileName)
 	mPlayFrame = 0;
 }
 /**
- * @brief	ƒRƒ}ƒ“ƒhû˜^I—¹ƒŠƒNƒGƒXƒg
+ * @brief	ã‚³ãƒãƒ³ãƒ‰åéŒ²çµ‚äº†ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 void UCSDebugAutoPilotModeRecord::RequestEndRecord()
 {
 	SetMode(ECommandMode::EndRecord);
 }
 /**
- * @brief	’â~ƒŠƒNƒGƒXƒg
+ * @brief	åœæ­¢ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 void UCSDebugAutoPilotModeRecord::RequestIdle()
 {
@@ -113,7 +113,7 @@ void UCSDebugAutoPilotModeRecord::RequestIdle()
 }
 
 /**
- * @brief	o—Íƒtƒ@ƒCƒ‹ƒpƒXæ“¾
+ * @brief	å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
  */
 FString	UCSDebugAutoPilotModeRecord::GetFilePath() const
 {
@@ -123,7 +123,7 @@ FString	UCSDebugAutoPilotModeRecord::GetFilePath() const
 }
 
 /**
- * @brief	‹L˜^‚µ‚½“ü—Í‚ğÄ¶‚·‚é
+ * @brief	è¨˜éŒ²ã—ãŸå…¥åŠ›ã‚’å†ç”Ÿã™ã‚‹
  */
 bool UCSDebugAutoPilotModeRecord::UpdatePlayInputRecord(float DeltaTime)
 {
@@ -166,7 +166,7 @@ bool UCSDebugAutoPilotModeRecord::UpdatePlayInputRecord(float DeltaTime)
 }
 
 /**
- * @brief	‹L˜^‚µ‚½“ü—Í‚ğƒ[ƒh
+ * @brief	è¨˜éŒ²ã—ãŸå…¥åŠ›ã‚’ãƒ­ãƒ¼ãƒ‰
  */
 bool UCSDebugAutoPilotModeRecord::LoadInputRecordFile(float DeltaTime)
 {
@@ -206,7 +206,7 @@ bool UCSDebugAutoPilotModeRecord::LoadInputRecordFile(float DeltaTime)
 }
 
 /**
- * @brief	‹L˜^‚µ‚½“ü—Í‚ğÄ¶‚·‚é‚Ü‚Å‚Ì‘Ò‚¿
+ * @brief	è¨˜éŒ²ã—ãŸå…¥åŠ›ã‚’å†ç”Ÿã™ã‚‹ã¾ã§ã®å¾…ã¡
  */
 bool UCSDebugAutoPilotModeRecord::WaitPlayInputRecordFile(float DeltaTime)
 {
@@ -237,7 +237,7 @@ bool UCSDebugAutoPilotModeRecord::WaitPlayInputRecordFile(float DeltaTime)
 }
 
 /**
- * @brief	‹L˜^‚µ‚½“ü—Í‚ğÀÛ‚ÉÄ¶
+ * @brief	è¨˜éŒ²ã—ãŸå…¥åŠ›ã‚’å®Ÿéš›ã«å†ç”Ÿ
  */
 bool UCSDebugAutoPilotModeRecord::PlayInputRecordFile(float DeltaTime)
 {
@@ -271,7 +271,7 @@ bool UCSDebugAutoPilotModeRecord::PlayInputRecordFile(float DeltaTime)
 			}
 		}
 		else if (InCommand.mEndFrame + 1 == mPlayFrame)
-		{//‘OƒtƒŒ[ƒ€‚Åˆ—‚µ‚Ä‚½
+		{//å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã§å‡¦ç†ã—ã¦ãŸ
 			if (Key.IsAxis1D())
 			//if (Key.IsFloatAxis())
 			{
@@ -290,7 +290,7 @@ bool UCSDebugAutoPilotModeRecord::PlayInputRecordFile(float DeltaTime)
 }
 
 /**
- * @brief	“ü—Í‚Ì‹L˜^
+ * @brief	å…¥åŠ›ã®è¨˜éŒ²
  */
 bool UCSDebugAutoPilotModeRecord::UpdateInputRecord(float DeltaTime)
 {
@@ -315,7 +315,7 @@ bool UCSDebugAutoPilotModeRecord::UpdateInputRecord(float DeltaTime)
 	return true;
 }
 /**
- * @brief	“ü—Í‚Ì‹L˜^‚ğŠJn
+ * @brief	å…¥åŠ›ã®è¨˜éŒ²ã‚’é–‹å§‹
  */
 bool UCSDebugAutoPilotModeRecord::BeginInputRecord(float DeltaTime)
 {
@@ -345,7 +345,7 @@ bool UCSDebugAutoPilotModeRecord::BeginInputRecord(float DeltaTime)
 	return true;
 }
 /**
- * @brief	“ü—Í‚Ì‹L˜^
+ * @brief	å…¥åŠ›ã®è¨˜éŒ²
  */
 bool UCSDebugAutoPilotModeRecord::RecordingInput(float DeltaTime)
 {
@@ -429,7 +429,7 @@ bool UCSDebugAutoPilotModeRecord::RecordingInput(float DeltaTime)
 
 	mCommand.mEndFrame = mPlayFrame;
 
-	//‰½ŒÌ‚©Widget‚ÌØ‚è‘Ö‚¦‚ÅPlayerInput‚ªXV‚³‚ê‚È‚­‚È‚é‚Ì‚Å
+	//ä½•æ•…ã‹Widgetã®åˆ‡ã‚Šæ›¿ãˆã§PlayerInputãŒæ›´æ–°ã•ã‚Œãªããªã‚‹ã®ã§
 	//if (bInputUI
 	//	&& bAnyInput)
 	//{
@@ -441,7 +441,7 @@ bool UCSDebugAutoPilotModeRecord::RecordingInput(float DeltaTime)
 
 #if 0
 /**
- * @brief	ƒfƒoƒbƒO‘I‘ğ‚ÌƒfƒoƒbƒOî•ñ
+ * @brief	ãƒ‡ãƒãƒƒã‚°é¸æŠæ™‚ã®ãƒ‡ãƒãƒƒã‚°æƒ…å ±
  */
 void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo(UDebugSelectComponent& InDebugSelect, float DeltaTime)
 {
@@ -464,7 +464,7 @@ void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo(UDebugSelectComponent& I
 	}
 }
 /**
- * @brief	ƒfƒoƒbƒO‘I‘ğ‚ÌƒfƒoƒbƒO•\¦
+ * @brief	ãƒ‡ãƒãƒƒã‚°é¸æŠæ™‚ã®ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeRecord::DebugDrawSelected(UCanvas* Canvas, const APlayerController* InPlayerController)
 {
@@ -472,8 +472,8 @@ void	UCSDebugAutoPilotModeRecord::DebugDrawSelected(UCanvas* Canvas, const APlay
 }
 
 /**
- * @brief	UI‘¤‚ÅƒL[‚ğ‰Ÿ‚µ‚½
- *			RecordingInput()‚¾‚Æ‰½ŒÌ‚©“Á’è‚Ìwidget‚Ì“Á’è‚Ìƒ{ƒ^ƒ“‚Å‚¾‚¯PlayerInput‚ª”½‰‚µ‚È‚¢‚Ì‚Åê—p‚É—pˆÓ
+ * @brief	UIå´ã§ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸæ™‚
+ *			RecordingInput()ã ã¨ä½•æ•…ã‹ç‰¹å®šã®widgetã®ç‰¹å®šã®ãƒœã‚¿ãƒ³ã§ã ã‘PlayerInputãŒåå¿œã—ãªã„ã®ã§å°‚ç”¨ã«ç”¨æ„
  */
 void	UCSDebugAutoPilotModeRecord::OnPushUIKey(const FKey& InKey)
 {
@@ -504,7 +504,7 @@ void	UCSDebugAutoPilotModeRecord::OnPushUIKey(const FKey& InKey)
 
 
 /**
- * @brief	Playerî•ñ•\¦
+ * @brief	Playeræƒ…å ±è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo_Player(UDebugSelectComponent& InDebugSelect)
 {
@@ -526,7 +526,7 @@ void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo_Player(UDebugSelectCompo
 	InDebugSelect.EndDebugInfoCategory();
 }
 /**
- * @brief	“ü—Í‚µ‚Ä‚éKeyî•ñ•\¦
+ * @brief	å…¥åŠ›ã—ã¦ã‚‹Keyæƒ…å ±è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo_InputKey(UDebugSelectComponent& InDebugSelect)
 {
@@ -562,7 +562,7 @@ void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo_InputKey(UDebugSelectCom
 	InDebugSelect.EndDebugInfoCategory();
 }
 /**
- * @brief	Ä¶‚·‚éKeyî•ñ•\¦
+ * @brief	å†ç”Ÿã™ã‚‹Keyæƒ…å ±è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeRecord::DebugUpdateSelectInfo_PlayKey(UDebugSelectComponent& InDebugSelect)
 {

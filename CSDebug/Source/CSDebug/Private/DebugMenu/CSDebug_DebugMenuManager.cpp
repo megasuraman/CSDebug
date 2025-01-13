@@ -1,5 +1,7 @@
 // Copyright 2022 SensyuGames.
+#include "DebugMenu/CSDebug_DebugMenuManager.h"
 
+#include "CSDebug_Subsystem.h"
 #include "DebugMenu/CSDebug_DebugMenuManager.h"
 #include "DebugMenu/CSDebug_DebugMenuNodeBool.h"
 #include "DebugMenu/CSDebug_DebugMenuNodeInt.h"
@@ -12,7 +14,7 @@
 UCSDebug_DebugMenuManager* UCSDebug_DebugMenuManager::sGet(const UObject* InObject)
 {
 	UGameInstance* GameInstance = InObject->GetWorld()->GetGameInstance();
-	UCSDebugSubsystem* CSDebugSubsystem = GameInstance->GetSubsystem<UCSDebugSubsystem>();
+	UCSDebug_Subsystem* CSDebugSubsystem = GameInstance->GetSubsystem<UCSDebug_Subsystem>();
 	return CSDebugSubsystem->GetDebugMenuManager();
 }
 
@@ -31,7 +33,7 @@ void UCSDebug_DebugMenuManager::Init()
 {
 	ClearNode();
 
-	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
+	const UCSDebug_Config* CSDebugConfig = GetDefault<UCSDebug_Config>();
 	const UDataTable* DataTable = CSDebugConfig->mDebugMenuDataTable.LoadSynchronous();
 	if (DataTable == nullptr)
 	{
@@ -81,7 +83,7 @@ void UCSDebug_DebugMenuManager::DebugTick(const float InDeltaTime)
 		return;
 	}
 
-	const UCSDebugConfig* CSDebugConfig = GetDefault<UCSDebugConfig>();
+	const UCSDebug_Config* CSDebugConfig = GetDefault<UCSDebug_Config>();
 	if (CSDebugConfig->mDebugCommand_ReadyKey.IsPressed(*PlayerInput))
 	{
 		return;

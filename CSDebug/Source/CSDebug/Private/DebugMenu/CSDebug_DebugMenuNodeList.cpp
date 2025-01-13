@@ -190,21 +190,21 @@ void CSDebug_DebugMenuNodeList::DrawEditValue(UCanvas* InCanvas, const FVector2D
 	FVector2D DrawWindowPos = SubWindowPos;
 
 	if(StringListNum > mEditDrawListNum)
-	{//ÉXÉNÉçÅ[ÉãÉoÅ[
+	{//„Çπ„ÇØ„É≠„Éº„É´„Éê„Éº
 		const FVector2D ScrollBarFramePos = FVector2D(SubWindowPos.X + WindowExtent.X, SubWindowPos.Y);
 		const FVector2D ScrollBarFrameExtent(10.f, WindowExtent.Y * static_cast<float>(mEditDrawListNum));
-		{// â∫ï~Ç´
+		{// ‰∏ãÊï∑„Åç
 			FCanvasTileItem Item(ScrollBarFramePos, ScrollBarFrameExtent, WindowBackColor);
 			Item.BlendMode = ESimpleElementBlendMode::SE_BLEND_Translucent;
 			InCanvas->DrawItem(Item);
 		}
-		{// òg
+		{// Êû†
 			FCanvasBoxItem Item(ScrollBarFramePos, ScrollBarFrameExtent);
 			Item.SetColor(GetWindowFrameColor());
 			Item.LineThickness = 1.f;
 			InCanvas->DrawItem(Item);
 		}
-		{//ÉoÅ[
+		{//„Éê„Éº
 			const float SpaceRatio = static_cast<float>(mEditDrawListNum) / static_cast<float>(StringListNum);
 
 			FVector2D ScrollBarPos = ScrollBarFramePos + FVector2D(2.f,2.f);
@@ -222,13 +222,13 @@ void CSDebug_DebugMenuNodeList::DrawEditValue(UCanvas* InCanvas, const FVector2D
 
 	for(int32 i= mEditDrawIndexMin; i<=mEditDrawIndexMax; ++i)
 	{
-		// â∫ï~Ç´
+		// ‰∏ãÊï∑„Åç
 		{
 			FCanvasTileItem Item(DrawWindowPos, WindowExtent, WindowBackColor);
 			Item.BlendMode = ESimpleElementBlendMode::SE_BLEND_Translucent;
 			InCanvas->DrawItem(Item);
 		}
-		// òg
+		// Êû†
 		{
 			FCanvasBoxItem Item(DrawWindowPos, WindowExtent);
 			Item.SetColor(GetWindowFrameColor());
@@ -248,7 +248,7 @@ void CSDebug_DebugMenuNodeList::DrawEditValue(UCanvas* InCanvas, const FVector2D
 
 		DrawWindowPos.Y += WindowExtent.Y;
 	}
-	{//ëIëòg
+	{//ÈÅ∏ÊäûÊû†
 		FCanvasBoxItem Item(SelectWindowPos, WindowExtent);
 		Item.SetColor(GetSelectColor());
 		Item.LineThickness = 3.f;
@@ -256,7 +256,7 @@ void CSDebug_DebugMenuNodeList::DrawEditValue(UCanvas* InCanvas, const FVector2D
 	}
 
 #if 0
-	{//ÉfÉoÉbÉOï\é¶
+	{//„Éá„Éê„ÉÉ„Ç∞Ë°®Á§∫
 		const FString DrawString = FString::Printf(TEXT("mEditSelectIndex(%d) %d-%d"),mEditSelectIndex,mEditDrawIndexMin,mEditDrawIndexMax);
 		FCanvasTextItem Item(SubWindowPos + WindowExtent, FText::FromString(DrawString), GEngine->GetSmallFont(), FColor::Red);
 		Item.Scale = FVector2D(1.f);

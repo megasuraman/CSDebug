@@ -1,7 +1,7 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebugAutoPilotComponent.h
- * @brief PlayerController‚É‘Î‚µ‚Ä©“®“ü—Í“™‚ğ•â•‚·‚éComponent
+ * @brief PlayerControllerÃ‡â€¦Ã«Å’Ã‡ÂµÃ‡Æ’Ã©Â©Ã¬Ã†Ã¬Â¸Ã³Ã•Ã¬Ã´Ã‡ï£¿Ã¯â€šÃ¨Ã¯Ã‡âˆ‘Ã‡ÃˆComponent
  * @author SensyuGames
  * @date 2021/12/28
  */
@@ -18,7 +18,7 @@ class APlayerController;
 class UCSDebugAutoPilotModeBase;
 
 /* ------------------------------------------------------------
-   !©“®‘€ìƒ‚[ƒh
+   !Ã©Â©Ã¬Ã†Ã«Ã„Ã§ÃÃ‰Ã‡Ã…[Ã‰h
 ------------------------------------------------------------ */
 enum class ECSDebugAutoPilotMode : uint8
 {

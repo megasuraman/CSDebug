@@ -1,7 +1,7 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebugAutoPilotComponent.cpp
- * @brief PlayerController‚É‘Î‚µ‚Ä©“®“ü—Í“™‚ğ•â•‚·‚éComponent
+ * @brief PlayerControllerã«å¯¾ã—ã¦è‡ªå‹•å…¥åŠ›ç­‰ã‚’è£œåŠ©ã™ã‚‹Component
  * @author SensyuGames
  * @date 2021/12/28
  */
@@ -43,7 +43,7 @@ void UCSDebugAutoPilotComponent::BeginDestroy()
 }
 
 /**
- * @brief PlayerInput‚Ìˆ—‘O
+ * @brief PlayerInputã®å‡¦ç†å‰
  */
 void UCSDebugAutoPilotComponent::PreProcessInput(float DeltaTime)
 {
@@ -59,7 +59,7 @@ void UCSDebugAutoPilotComponent::PreProcessInput(float DeltaTime)
 }
 
 /**
- * @brief PlayerInput‚Ìˆ—Œã
+ * @brief PlayerInputã®å‡¦ç†å¾Œ
  */
 void UCSDebugAutoPilotComponent::PostProcessInput(float DeltaTime)
 {
@@ -75,7 +75,7 @@ void UCSDebugAutoPilotComponent::PostProcessInput(float DeltaTime)
 }
 
 /**
- * @brief APlayerController‚ğæ“¾
+ * @brief APlayerControllerã‚’å–å¾—
  */
 APlayerController* UCSDebugAutoPilotComponent::GetPlayerController()
 {
@@ -83,7 +83,7 @@ APlayerController* UCSDebugAutoPilotComponent::GetPlayerController()
 }
 
 /**
- * @brief ModeƒZƒbƒg
+ * @brief Modeã‚»ãƒƒãƒˆ
  */
 void UCSDebugAutoPilotComponent::SetMode(ECSDebugAutoPilotMode InMode)
 {
@@ -120,7 +120,7 @@ void UCSDebugAutoPilotComponent::SetMode(ECSDebugAutoPilotMode InMode)
 }
 
 /**
- * @brief ’Êí‚Ì“ü—Íˆ—‚Ì–³Œø‰»
+ * @brief é€šå¸¸ã®å…¥åŠ›å‡¦ç†ã®ç„¡åŠ¹åŒ–
  */
 void UCSDebugAutoPilotComponent::SetIgnoreDefaultInput(const bool InIgnore)
 {
@@ -135,7 +135,7 @@ void UCSDebugAutoPilotComponent::SetIgnoreDefaultInput(const bool InIgnore)
 }
 
 /* ------------------------------------------------------------
-   !Ä¶
+   !å†ç”Ÿ
 ------------------------------------------------------------ */
 /**
  * @brief 
@@ -148,7 +148,7 @@ void UCSDebugAutoPilotComponent::RequestPlayInputRecord(const FString& InFileNam
 }
 
 /**
- * @brief Ä¶I‚í‚Á‚½‚©‚Ç‚¤‚©
+ * @brief å†ç”Ÿçµ‚ã‚ã£ãŸã‹ã©ã†ã‹
  */
 bool UCSDebugAutoPilotComponent::IsFinishPlayRecord() const
 {
@@ -160,7 +160,7 @@ bool UCSDebugAutoPilotComponent::IsFinishPlayRecord() const
 }
 
 /**
- * @brief ƒRƒ}ƒ“ƒhû˜^ŠJn
+ * @brief ã‚³ãƒãƒ³ãƒ‰åéŒ²é–‹å§‹
  */
 void UCSDebugAutoPilotComponent::RequestBeginRecord(const FString& InFileName)
 {
@@ -170,7 +170,7 @@ void UCSDebugAutoPilotComponent::RequestBeginRecord(const FString& InFileName)
 }
 
 /**
- * @brief ƒRƒ}ƒ“ƒhû˜^I—¹
+ * @brief ã‚³ãƒãƒ³ãƒ‰åéŒ²çµ‚äº†
  */
 void UCSDebugAutoPilotComponent::RequestEndRecord()
 {
@@ -180,7 +180,7 @@ void UCSDebugAutoPilotComponent::RequestEndRecord()
 }
 
 /**
- * @brief ƒRƒ}ƒ“ƒhû˜^‚ÌIdleó‘Ô
+ * @brief ã‚³ãƒãƒ³ãƒ‰åéŒ²ã®IdleçŠ¶æ…‹
  */
 void UCSDebugAutoPilotComponent::RequestIdleRecord()
 {
@@ -190,7 +190,7 @@ void UCSDebugAutoPilotComponent::RequestIdleRecord()
 }
 
 /**
- * @brief	Draw“o˜^‚Ìon/off
+ * @brief	Drawç™»éŒ²ã®on/off
  */
 void	UCSDebugAutoPilotComponent::RequestDebugDraw(const bool bInActive)
 {
@@ -227,7 +227,7 @@ void	UCSDebugAutoPilotComponent::DebugDraw(UCanvas* InCanvas, APlayerController*
 }
 
 /**
- * @brief	ƒ‚[ƒhŠJn
+ * @brief	ãƒ¢ãƒ¼ãƒ‰é–‹å§‹æ™‚
  */
 void UCSDebugAutoPilotComponent::OnBeginMode()
 {
@@ -247,7 +247,7 @@ void UCSDebugAutoPilotComponent::OnBeginMode()
 }
 
 /**
- * @brief	ƒ‚[ƒhI—¹
+ * @brief	ãƒ¢ãƒ¼ãƒ‰çµ‚äº†æ™‚
  */
 void UCSDebugAutoPilotComponent::OnEndMode()
 {
@@ -267,11 +267,11 @@ void UCSDebugAutoPilotComponent::OnEndMode()
 }
 
 /**
- * @brief	ƒtƒŒ[ƒ€ƒŒ[ƒgŒÅ’è
+ * @brief	ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆå›ºå®š
  */
 void UCSDebugAutoPilotComponent::SetFixFrameRate(bool InFix)
 {
-#if 1//4.21‚ÅŒÅ’è•û–@‚ª•Ï‚í‚Á‚½H
+#if 1//4.21ã§å›ºå®šæ–¹æ³•ãŒå¤‰ã‚ã£ãŸï¼Ÿ
 	if (GEngine)
 	{
 		GEngine->bUseFixedFrameRate = InFix;
@@ -287,7 +287,7 @@ void UCSDebugAutoPilotComponent::SetFixFrameRate(bool InFix)
 #if 0
 
 /**
- * @brief	ƒ‰ƒ“ƒ_ƒ€ƒCƒ“ƒvƒbƒgŠJn
+ * @brief	ãƒ©ãƒ³ãƒ€ãƒ ã‚¤ãƒ³ãƒ—ãƒƒãƒˆé–‹å§‹
  */
 void UCSDebugAutoPilotComponent::RequestBeginRandom()
 {
@@ -304,7 +304,7 @@ void UCSDebugAutoPilotComponent::RequestBeginRandom()
 }
 
 /**
- * @brief	ƒ‰ƒ“ƒ_ƒ€ƒCƒ“ƒvƒbƒgI—¹
+ * @brief	ãƒ©ãƒ³ãƒ€ãƒ ã‚¤ãƒ³ãƒ—ãƒƒãƒˆçµ‚äº†
  */
 void UCSDebugAutoPilotComponent::RequestEndRandom()
 {
@@ -321,7 +321,7 @@ void UCSDebugAutoPilotComponent::RequestEndRandom()
 }
 
 /**
- * @brief	AutoPlayŠJn
+ * @brief	AutoPlayé–‹å§‹
  */
 void UCSDebugAutoPilotComponent::RequestBeginAutoPlay()
 {
@@ -340,7 +340,7 @@ void UCSDebugAutoPilotComponent::RequestBeginAutoPlay()
 }
 
 /**
- * @brief	AutoPlayI—¹
+ * @brief	AutoPlayçµ‚äº†
  */
 void UCSDebugAutoPilotComponent::RequestEndAutoPlay()
 {
@@ -360,7 +360,7 @@ void UCSDebugAutoPilotComponent::RequestEndAutoPlay()
 }
 
 /**
- * @brief	SemiAutoPlayŠJn
+ * @brief	SemiAutoPlayé–‹å§‹
  */
 void UCSDebugAutoPilotComponent::RequestBeginSemiAutoPlay()
 {
@@ -372,7 +372,7 @@ void UCSDebugAutoPilotComponent::RequestBeginSemiAutoPlay()
 }
 
 /**
- * @brief	SemiAutoPlayI—¹
+ * @brief	SemiAutoPlayçµ‚äº†
  */
 void UCSDebugAutoPilotComponent::RequestEndSemiAutoPlay()
 {
@@ -385,7 +385,7 @@ void UCSDebugAutoPilotComponent::RequestEndSemiAutoPlay()
 }
 
 /**
- * @brief	UI‘¤‚ÅƒL[‚ğ‰Ÿ‚µ‚½
+ * @brief	UIå´ã§ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸæ™‚
  */
 void UCSDebugAutoPilotComponent::OnPushUIKey(const FKey& InKey)
 {
@@ -409,7 +409,7 @@ uint32 UCSDebugAutoPilotComponent::GetKeyId(const FKey* InKey) const
 }
 uint32 UCSDebugAutoPilotComponent::GetKeyId(const FKey& InKey) const
 {
-	//mKeyMap‚Åƒ|ƒCƒ“ƒ^ˆµ‚¤‚Ì‚â‚ß‚é‚×‚«‚È‹C‚à
+	//mKeyMapã§ãƒã‚¤ãƒ³ã‚¿æ‰±ã†ã®ã‚„ã‚ã‚‹ã¹ããªæ°—ã‚‚
 	for (const auto& Element : mKeyMap)
 	{
 		if (*Element.Key == InKey)
@@ -439,7 +439,7 @@ const FKey* UCSDebugAutoPilotComponent::GetKey(ECSDebugAutoPilotKey InKey) const
 }
 
 /**
- * @brief	ƒpƒbƒh“ü—ÍƒRƒ}ƒ“ƒhƒŠƒNƒGƒXƒg
+ * @brief	ãƒ‘ãƒƒãƒ‰å…¥åŠ›ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 int32 UCSDebugAutoPilotComponent::RequestCommandInput(ECSDebugAutoPilotKey InKey, float InInputTime, float InAxisValue)
 {
@@ -449,7 +449,7 @@ int32 UCSDebugAutoPilotComponent::RequestCommandInput(ECSDebugAutoPilotKey InKey
 }
 
 /**
- * @brief	ˆÚ“®ƒRƒ}ƒ“ƒhƒŠƒNƒGƒXƒg
+ * @brief	ç§»å‹•ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 int32 UCSDebugAutoPilotComponent::RequestCommandMove(const FVector& InGoalPos)
 {
@@ -458,7 +458,7 @@ int32 UCSDebugAutoPilotComponent::RequestCommandMove(const FVector& InGoalPos)
 	return ModeCommand->RequestCommandMove(InGoalPos);
 }
 /**
- * @brief	ˆÚ“®I—¹
+ * @brief	ç§»å‹•çµ‚äº†
  */
 int32 UCSDebugAutoPilotComponent::RequestCommandMoveStop()
 {
@@ -470,14 +470,14 @@ int32 UCSDebugAutoPilotComponent::RequestCommandMoveStop()
 	return 0;
 }
 /**
- * @brief	UŒ‚ƒRƒ}ƒ“ƒhƒŠƒNƒGƒXƒg
+ * @brief	æ”»æ’ƒã‚³ãƒãƒ³ãƒ‰ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 int32 UCSDebugAutoPilotComponent::RequestCommandAttack()
 {
 	return 0;
 }
 /**
- * @brief	ƒRƒ}ƒ“ƒhI—¹‚©‚Ç‚¤‚©
+ * @brief	ã‚³ãƒãƒ³ãƒ‰çµ‚äº†ã‹ã©ã†ã‹
  */
 bool UCSDebugAutoPilotComponent::IsFinishCommand(int32 InCommandId)
 {
@@ -489,7 +489,7 @@ bool UCSDebugAutoPilotComponent::IsFinishCommand(int32 InCommandId)
 	return false;
 }
 /**
- * @brief	ÅŒã‚ÉƒŠƒNƒGƒXƒg‚µ‚½ƒRƒ}ƒ“ƒh‚ªI—¹‚©‚Ç‚¤‚©
+ * @brief	æœ€å¾Œã«ãƒªã‚¯ã‚¨ã‚¹ãƒˆã—ãŸã‚³ãƒãƒ³ãƒ‰ãŒçµ‚äº†ã‹ã©ã†ã‹
  */
 bool UCSDebugAutoPilotComponent::IsFinishLastCommand()
 {
@@ -501,7 +501,7 @@ bool UCSDebugAutoPilotComponent::IsFinishLastCommand()
 	return false;
 }
 /**
- * @brief	‘SƒRƒ}ƒ“ƒhI—¹‚©‚Ç‚¤‚©
+ * @brief	å…¨ã‚³ãƒãƒ³ãƒ‰çµ‚äº†ã‹ã©ã†ã‹
  */
 bool UCSDebugAutoPilotComponent::IsFinishAllCommand()
 {
@@ -513,7 +513,7 @@ bool UCSDebugAutoPilotComponent::IsFinishAllCommand()
 	return true;
 }
 /**
- * @brief	CommandScriptƒŠƒNƒGƒXƒg
+ * @brief	CommandScriptãƒªã‚¯ã‚¨ã‚¹ãƒˆ
  */
 bool UCSDebugAutoPilotComponent::RequestCommandScript(FString InPath)
 {
@@ -523,7 +523,7 @@ bool UCSDebugAutoPilotComponent::RequestCommandScript(FString InPath)
 	return true;
 }
 /**
- * @brief	Moveƒ‚[ƒh‚ÌˆÚ“®ææ“¾
+ * @brief	Moveãƒ¢ãƒ¼ãƒ‰ã®ç§»å‹•å…ˆå–å¾—
  */
 FVector UCSDebugAutoPilotComponent::GetCommandMoveGoalPos() const
 {
@@ -536,7 +536,7 @@ FVector UCSDebugAutoPilotComponent::GetCommandMoveGoalPos() const
 }
 
 /**
- * @brief	ƒfƒoƒbƒO‘I‘ğ‚ÌƒfƒoƒbƒOî•ñ
+ * @brief	ãƒ‡ãƒãƒƒã‚°é¸æŠæ™‚ã®ãƒ‡ãƒãƒƒã‚°æƒ…å ±
  */
 void UCSDebugAutoPilotComponent::DebugUpdateSelectInfo(float DeltaTime)
 {
@@ -559,7 +559,7 @@ void UCSDebugAutoPilotComponent::DebugUpdateSelectInfo(float DeltaTime)
 }
 
 /**
- * @brief	ƒfƒoƒbƒO‘I‘ğ‚ÌƒfƒoƒbƒO•\¦
+ * @brief	ãƒ‡ãƒãƒƒã‚°é¸æŠæ™‚ã®ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
  */
 void UCSDebugAutoPilotComponent::DebugDrawSelected(UCanvas* Canvas, const APlayerController* InPlayerController)
 {

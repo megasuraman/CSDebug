@@ -87,13 +87,13 @@ void CSDebug_DebugMenuNodeBase::Draw(UCanvas* InCanvas, const FVector2D& InPos, 
 	const FLinearColor WindowBackColor = GetWindowBackColor();
 	const FLinearColor WindowFrameColor = GetWindowFrameColor();
 	const FLinearColor FontColor = GetFontColor();
-	// â∫ï~Ç´
+	// ‰∏ãÊï∑„Åç
 	{
 		FCanvasTileItem Item(InPos, WindowExtent, WindowBackColor);
 		Item.BlendMode = ESimpleElementBlendMode::SE_BLEND_Translucent;
 		InCanvas->DrawItem(Item);
 	}
-	// òg
+	// Êû†
 	{
 		FCanvasBoxItem Item(InPos, WindowExtent);
 		if (bInSelect
@@ -109,7 +109,7 @@ void CSDebug_DebugMenuNodeBase::Draw(UCanvas* InCanvas, const FVector2D& InPos, 
 		}
 		InCanvas->DrawItem(Item);
 	}
-	// çÄñ⁄ñºï\é¶
+	// È†ÖÁõÆÂêçË°®Á§∫
 	{
 		const FVector2D StringPos = InPos + StringOffset;
 		FCanvasTextItem Item(StringPos, FText::FromString(mNodeData.mDisplayName), GEngine->GetSmallFont(), FontColor);
@@ -118,12 +118,12 @@ void CSDebug_DebugMenuNodeBase::Draw(UCanvas* InCanvas, const FVector2D& InPos, 
 	}
 	if(!bFolderNode)
 	{
-		// ílï\é¶ê¸
+		// ÂÄ§Ë°®Á§∫Á∑ö
 		const FVector2D BorderLinePosBegin(InPos.X + ValueLineOffsetX, InPos.Y);
 		const FVector2D BorderLinePosEnd(InPos.X + ValueLineOffsetX, InPos.Y + WindowExtent.Y);
 		DrawDebugCanvas2DLine(InCanvas, BorderLinePosBegin, BorderLinePosEnd, WindowFrameColor);
 
-		// ílï\é¶
+		// ÂÄ§Ë°®Á§∫
 		const FVector2D StringPos = BorderLinePosBegin + FVector2D(2.f, 2.f);
 		DrawValue(InCanvas, StringPos, FontColor);
 

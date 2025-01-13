@@ -19,7 +19,7 @@ void CSDebug_DebugMenuNodeFloat::OnBeginAction()
 	const int32 IntegerPart = FCString::Atoi(*IntegerPartString);
 	const int32 AbsIntegerPart = FMath::Abs(IntegerPart);
 	const int32 FractionalPart = FCString::Atoi(*FractionalPartString);;
-	{//¬”•”•ª
+	{//Ã¨Â¨ÃªÃ®Ã¯Ã®Ã¯â„¢
 		int32 CalcDigitValue = FractionalPart;
 		for (int32 i = 0; i < mEditDecimalNum; ++i)
 		{
@@ -28,7 +28,7 @@ void CSDebug_DebugMenuNodeFloat::OnBeginAction()
 			CalcDigitValue /= 10;
 		}
 	}
-	{//®”•”•ª
+	{//ÃªÃ†ÃªÃ®Ã¯Ã®Ã¯â„¢
 		int32 CalcDigitValue = AbsIntegerPart;
 		for (int32 i = 0; i < mEditIntegralDigitNum; ++i)
 		{
@@ -38,7 +38,7 @@ void CSDebug_DebugMenuNodeFloat::OnBeginAction()
 		}
 	}
 
-	//ÅŒã‚É•„†î•ñ
+	//Ã§â‰ˆÃ¥â€Ã‡â€¦Ã¯Ã‘Ã§ÃœÃ¨Ã“Ã¯Ã’
 	if (IntegerPart >= 0)
 	{
 		mEditDigitIntList.Add(1);
@@ -168,13 +168,13 @@ void CSDebug_DebugMenuNodeFloat::DrawEditValue(UCanvas* InCanvas, const FVector2
 	const FLinearColor WindowBackColor = GetWindowBackColor();
 	const FLinearColor WindowFrameColor = GetWindowFrameColor();
 	const FLinearColor FontColor = GetFontColor();
-	// ‰º•~‚«
+	// Ã¢âˆ«Ã¯~Ã‡Â´
 	{
 		FCanvasTileItem Item(SubWindowPos, WindowExtent, WindowBackColor);
 		Item.BlendMode = ESimpleElementBlendMode::SE_BLEND_Translucent;
 		InCanvas->DrawItem(Item);
 	}
-	// ˜g
+	// Ã²g
 	{
 		FCanvasBoxItem Item(SubWindowPos, WindowExtent);
 		Item.SetColor(GetSelectColor());
@@ -212,7 +212,7 @@ void CSDebug_DebugMenuNodeFloat::DrawEditValue(UCanvas* InCanvas, const FVector2
 			DrawDebugCanvas2DLine(InCanvas, LinePosBegin, LinePosEnd, LineColor, 2.f);
 		}
 	}
-	{//¬”“_
+	{//Ã¨Â¨ÃªÃ®Ã¬_
 		const float EditDigitPosX = 8.f + SubWindowPos.X + 8.f * static_cast<float>(mEditDigitNum - mEditDecimalNum);
 		FString DrawString = FString::Printf(TEXT("."));
 		FCanvasTextItem Item(FVector2D(EditDigitPosX, SubWindowPos.Y), FText::FromString(DrawString), GEngine->GetSmallFont(), FontColor);

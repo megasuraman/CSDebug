@@ -1,13 +1,13 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebug.cpp
- * @brief CSDebugのmodule
+ * @brief CSDebug縺ｮmodule
  * @author SensyuGames
  * @date 2020/5/25
  */
 
 #include "CSDebug.h"
-#include "CSDebugConfig.h"
+#include "CSDebug_Config.h"
 
 #if WITH_EDITOR
 #include "ISettingsModule.h"
@@ -23,12 +23,12 @@ void FCSDebugModule::StartupModule()
 	if (SettingsModule != nullptr)
 	{
 		SettingsModule->RegisterSettings(
-			"Project", //プロジェクト設定に出すために
+			"Project", //繝励Ο繧ｸ繧ｧ繧ｯ繝郁ｨｭ螳壹↓蜃ｺ縺吶◆繧√↓
 			"Plugins",
 			"CSDebug",
 			LOCTEXT("CSDebugName", "CSDebug"),
 			LOCTEXT("CSDebugDescription", "CSDebug Config"),
-			GetMutableDefault<UCSDebugConfig>()
+			GetMutableDefault<UCSDebug_Config>()
 		);
 	}
 #endif
@@ -43,7 +43,7 @@ void FCSDebugModule::ShutdownModule()
 	if (SettingsModule != nullptr)
 	{
 		SettingsModule->UnregisterSettings(
-			"Project", //プロジェクト設定に出すために
+			"Project", //繝励Ο繧ｸ繧ｧ繧ｯ繝郁ｨｭ螳壹↓蜃ｺ縺吶◆繧√↓
 			"Plugins",
 			"CSDebug"
 		);

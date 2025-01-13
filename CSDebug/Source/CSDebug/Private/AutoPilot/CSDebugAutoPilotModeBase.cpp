@@ -1,7 +1,7 @@
 // Copyright 2021 SensyuGames.
 /**
  * @file CSDebugAutoPilotModeBase.cpp
- * @brief ©“®“ü—Í“™‚ğ•â•‚·‚éŠeƒ‚[ƒhˆ—‚Ìƒx[ƒX
+ * @brief è‡ªå‹•å…¥åŠ›ç­‰ã‚’è£œåŠ©ã™ã‚‹å„ãƒ¢ãƒ¼ãƒ‰å‡¦ç†ã®ãƒ™ãƒ¼ã‚¹
  * @author SensyuGames
  * @date 2021/12/28
  */
@@ -17,7 +17,7 @@
 #include "GameFramework/PlayerInput.h"
 
 /**
- * @brief	e‚Æ‚µ‚ÄComponent‚ğƒZƒbƒg
+ * @brief	è¦ªã¨ã—ã¦Componentã‚’ã‚»ãƒƒãƒˆ
  */
 void	UCSDebugAutoPilotModeBase::SetParent(UCSDebugAutoPilotComponent* InParentComponent)
 {
@@ -30,7 +30,7 @@ void	UCSDebugAutoPilotModeBase::SetParent(UCSDebugAutoPilotComponent* InParentCo
 }
 
 /**
- * @brief	ƒpƒbƒh“ü—Í’læ“¾
+ * @brief	ãƒ‘ãƒƒãƒ‰å…¥åŠ›å€¤å–å¾—
  */
 float	UCSDebugAutoPilotModeBase::GetDebugDrawPadInfoAxisValue(ECSDebugAutoPilotKey InKey) const
 {
@@ -64,11 +64,11 @@ FKey	UCSDebugAutoPilotModeBase::GetKey(ECSDebugAutoPilotKey InKey) const
 }
 
 /**
- * @brief	ƒpƒbƒh“ü—Íó‘ÔƒfƒoƒbƒO•\¦
+ * @brief	ãƒ‘ãƒƒãƒ‰å…¥åŠ›çŠ¶æ…‹ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 {
-	const float VirtualGridLen = 15.f;//ƒOƒŠƒbƒhã‚É}Œ`‘‚­ƒCƒ[ƒW‚Å
+	const float VirtualGridLen = 15.f;//ã‚°ãƒªãƒƒãƒ‰ä¸Šã«å›³å½¢æ›¸ãã‚¤ãƒ¡ãƒ¼ã‚¸ã§
 	const FVector2D ButtonPosGridList[(uint8)ECSDebugAutoPilotKey::Num] =
 	{
 		FVector2D::ZeroVector,// Invalid,	//0
@@ -91,8 +91,8 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 		FVector2D(10.0f,6.0f),// Batsu,		//17
 		FVector2D(11.0f,5.0f),// Maru,		//18
 		FVector2D(8.5f, 3.75f),// Option,		//19
-		//(5.f,3.5f)ƒ^ƒbƒ`ƒpƒbƒh¶
-		//(7.f,3.5f)ƒ^ƒbƒ`ƒpƒbƒh‰E
+		//(5.f,3.5f)ã‚¿ãƒƒãƒãƒ‘ãƒƒãƒ‰å·¦
+		//(7.f,3.5f)ã‚¿ãƒƒãƒãƒ‘ãƒƒãƒ‰å³
 	};
 	const FVector2D ButtonLenGridList[(uint8)ECSDebugAutoPilotKey::Num] =
 	{
@@ -116,8 +116,8 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 		FVector2D(0.5f, 0.5f),// Batsu,		//17
 		FVector2D(0.5f, 0.5f),// Maru,		//18
 		FVector2D(0.5f, 0.5f),// Option,		//19
-		//(1.0f,1.0f)ƒ^ƒbƒ`ƒpƒbƒh¶
-		//(1.0f,1.0f)ƒ^ƒbƒ`ƒpƒbƒh‰E
+		//(1.0f,1.0f)ã‚¿ãƒƒãƒãƒ‘ãƒƒãƒ‰å·¦
+		//(1.0f,1.0f)ã‚¿ãƒƒãƒãƒ‘ãƒƒãƒ‰å³
 	};
 
 	const FVector2D Extent(VirtualGridLen*12.f, VirtualGridLen*9.f);
@@ -139,7 +139,7 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 		const FVector2D CenterPos = ScreenPos + ButtonPosGridList[i] * VirtualGridLen;
 		const FVector2D ExtenetV = ButtonLenGridList[i] * VirtualGridLen * 0.5f;
 
-		//stick‚Í“Áê‘Îˆ
+		//stickã¯ç‰¹æ®Šå¯¾å‡¦
 		if (KeyId == ECSDebugAutoPilotKey::LeftStickX)
 		{
 			FVector2D AxisV(GetDebugDrawPadInfoAxisValue(ECSDebugAutoPilotKey::LeftStickX), GetDebugDrawPadInfoAxisValue(ECSDebugAutoPilotKey::LeftStickY));
@@ -148,12 +148,12 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 		else if (KeyId == ECSDebugAutoPilotKey::RightStickX)
 		{
 			FVector2D AxisV(GetDebugDrawPadInfoAxisValue(ECSDebugAutoPilotKey::RightStickX), GetDebugDrawPadInfoAxisValue(ECSDebugAutoPilotKey::RightStickY));
-			AxisV *= FVector2D(1.f, -1.f);//‰½ŒÌ‚©‹t‚É‚È‚é‚Ì‚Å(‚à‚µ‚©‚µ‚Ä‡,‹t‚ÌƒIƒvƒVƒ‡ƒ“‚Ì‰e‹¿ó‚¯‚Ä‚éH)
+			AxisV *= FVector2D(1.f, -1.f);//ä½•æ•…ã‹é€†ã«ãªã‚‹ã®ã§(ã‚‚ã—ã‹ã—ã¦é †,é€†ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®å½±éŸ¿å—ã‘ã¦ã‚‹ï¼Ÿ)
 			DebugDrawStick(InCanvas, AxisV, CenterPos, ExtenetV.X);
 		}
 		else if (KeyId == ECSDebugAutoPilotKey::LeftStickY
 			|| KeyId == ECSDebugAutoPilotKey::RightStickY)
-		{	//x‚É”C‚¹‚é‚Ì‚Å
+		{	//xã«ä»»ã›ã‚‹ã®ã§
 			continue;;
 		}
 		else if (KeyId == ECSDebugAutoPilotKey::L3
@@ -175,7 +175,7 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPad(UCanvas* InCanvas)
 }
 
 /**
- * @brief	KeyMap—pˆÓ
+ * @brief	KeyMapç”¨æ„
  */
 void UCSDebugAutoPilotModeBase::InitializeKeyMap()
 {
@@ -208,7 +208,7 @@ void UCSDebugAutoPilotModeBase::InitializeKeyMap()
 }
 
 /**
- * @brief	DeadZoneMap—pˆÓ
+ * @brief	DeadZoneMapç”¨æ„
  */
 void UCSDebugAutoPilotModeBase::InitializePadDeadZoneMap()
 {
@@ -233,7 +233,7 @@ void UCSDebugAutoPilotModeBase::InitializePadDeadZoneMap()
 }
 
 /**
- * @brief	ƒpƒbƒh“ü—Íó‘ÔƒfƒoƒbƒO•\¦(‰º•~‚«)
+ * @brief	ãƒ‘ãƒƒãƒ‰å…¥åŠ›çŠ¶æ…‹ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º(ä¸‹æ•·ã)
  */
 void	UCSDebugAutoPilotModeBase::DebugDrawPadSheet(UCanvas* InCanvas, const FVector2D& InBasePos, const FVector2D& InExtent)
 {
@@ -242,23 +242,23 @@ void	UCSDebugAutoPilotModeBase::DebugDrawPadSheet(UCanvas* InCanvas, const FVect
 	const uint32 WindowPointListSize = 4;
 	const FVector2D WindowPointList[WindowPointListSize] =
 	{
-		FVector2D(InBasePos.X, InBasePos.Y),//¶ã
-		FVector2D(InBasePos.X, InBasePos.Y + InExtent.Y),//¶‰º
-		FVector2D(InBasePos.X + InExtent.X, InBasePos.Y + InExtent.Y),//‰E‰º
-		FVector2D(InBasePos.X + InExtent.X, InBasePos.Y)//‰Eã
+		FVector2D(InBasePos.X, InBasePos.Y),//å·¦ä¸Š
+		FVector2D(InBasePos.X, InBasePos.Y + InExtent.Y),//å·¦ä¸‹
+		FVector2D(InBasePos.X + InExtent.X, InBasePos.Y + InExtent.Y),//å³ä¸‹
+		FVector2D(InBasePos.X + InExtent.X, InBasePos.Y)//å³ä¸Š
 	};
 	for (uint32 i = 0; i < WindowPointListSize; ++i)
-	{//˜g
+	{//æ 
 		DrawDebugCanvas2DLine(InCanvas, WindowPointList[i], WindowPointList[(i + 1) % WindowPointListSize], FrameColor);
 	}
-	{//‰º•~‚«
+	{//ä¸‹æ•·ã
 		FCanvasTileItem TileItem(InBasePos, GWhiteTexture, FVector2D(InExtent.X, InExtent.Y), BackColor);
 		TileItem.BlendMode = SE_BLEND_Translucent;
 		InCanvas->DrawItem(TileItem);
 	}
 }
 /**
- * @brief	2D–îˆó•\¦
+ * @brief	2DçŸ¢å°è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeBase::DebugDrawArrow2D(UCanvas* InCanvas, const FVector2D& InStartPos, const FVector2D& InGoalPos, const FLinearColor& InColor, float InArrowLen)
 {
@@ -280,7 +280,7 @@ void	UCSDebugAutoPilotModeBase::DebugDrawArrow2D(UCanvas* InCanvas, const FVecto
 	}
 }
 /**
- * @brief	ƒ{ƒ^ƒ“•\¦
+ * @brief	ãƒœã‚¿ãƒ³è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeBase::DebugDrawButton(UCanvas* InCanvas, ECSDebugAutoPilotKey InKey, const FVector2D& InPos, const FVector2D& InExtent)
 {
@@ -294,23 +294,23 @@ void	UCSDebugAutoPilotModeBase::DebugDrawButton(UCanvas* InCanvas, ECSDebugAutoP
 	const uint32 WindowPointListSize = 4;
 	const FVector2D WindowPointList[WindowPointListSize] =
 	{
-		FVector2D(InPos.X - InExtent.X, InPos.Y - InExtent.Y),//¶ã
-		FVector2D(InPos.X - InExtent.X, InPos.Y + InExtent.Y),//¶‰º
-		FVector2D(InPos.X + InExtent.X, InPos.Y + InExtent.Y),//‰E‰º
-		FVector2D(InPos.X + InExtent.X, InPos.Y - InExtent.Y)//‰Eã
+		FVector2D(InPos.X - InExtent.X, InPos.Y - InExtent.Y),//å·¦ä¸Š
+		FVector2D(InPos.X - InExtent.X, InPos.Y + InExtent.Y),//å·¦ä¸‹
+		FVector2D(InPos.X + InExtent.X, InPos.Y + InExtent.Y),//å³ä¸‹
+		FVector2D(InPos.X + InExtent.X, InPos.Y - InExtent.Y)//å³ä¸Š
 	};
 	for (uint32 i = 0; i < WindowPointListSize; ++i)
-	{//˜g
+	{//æ 
 		DrawDebugCanvas2DLine(InCanvas, WindowPointList[i], WindowPointList[(i + 1) % WindowPointListSize], FrameColor);
 	}
-	{//‰º•~‚«
+	{//ä¸‹æ•·ã
 		FCanvasTileItem TileItem(FVector2D(InPos.X - InExtent.X, InPos.Y - InExtent.Y), GWhiteTexture, FVector2D(InExtent.X, InExtent.Y)*2.f, BackColor);
 		TileItem.BlendMode = SE_BLEND_Translucent;
 		InCanvas->DrawItem(TileItem);
 	}
 }
 /**
- * @brief	ƒXƒeƒBƒbƒN•\¦
+ * @brief	ã‚¹ãƒ†ã‚£ãƒƒã‚¯è¡¨ç¤º
  */
 void	UCSDebugAutoPilotModeBase::DebugDrawStick(UCanvas* InCanvas, const FVector2D& InAxisV, const FVector2D& InPos, const float InRadius)
 {
