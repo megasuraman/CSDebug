@@ -1,0 +1,39 @@
+// Copyright 2022 SensyuGames.
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Serialization/JsonSerializerMacros.h"
+
+struct FCSDebug_DebugMenuSaveDataNode : public FJsonSerializable
+{
+	BEGIN_JSON_SERIALIZER
+	JSON_SERIALIZE("mPath", mPath);
+	JSON_SERIALIZE("mValueString", mValueString);
+	END_JSON_SERIALIZER
+
+	FString mPath;
+	FString mValueString;
+};
+
+struct FCSDebug_DebugMenuSaveData : public FJsonSerializable
+{
+	BEGIN_JSON_SERIALIZER
+	JSON_SERIALIZE_ARRAY_SERIALIZABLE("mSaveNodeList", mSaveNodeList, FCSDebug_DebugMenuSaveDataNode);
+	END_JSON_SERIALIZER
+
+public:
+	void Clear();
+	void Save();
+	void Load();
+	void WriteValue(const FString& InPath, const FString& InValue);
+	FString GetValueString(const FString& InPath) const;
+	const TMap<FString, FString>& GetValueMap() const{return mValueMap;}
+
+protected:
+	static FString GetSaveFilePath();
+
+private:
+	TArray<FCSDebug_DebugMenuSaveDataNode> mSaveNodeList;
+	TMap<FString, FString> mValueMap;
+	bool mbLoaded = false;
+};

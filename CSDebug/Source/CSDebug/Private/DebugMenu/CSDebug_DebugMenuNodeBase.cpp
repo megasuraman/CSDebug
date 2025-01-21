@@ -135,7 +135,7 @@ void CSDebug_DebugMenuNodeBase::Draw(UCanvas* InCanvas, const FVector2D& InPos, 
 	}
 }
 
-FString CSDebug_DebugMenuNodeBase::GetValueString() const
+FString CSDebug_DebugMenuNodeBase::GetDrawValueString() const
 {
 	if (mNodeData.mKind == ECSDebug_DebugMenuValueKind::List
 		|| mNodeData.mKind == ECSDebug_DebugMenuValueKind::Enum)
@@ -192,6 +192,11 @@ void CSDebug_DebugMenuNodeBase::SetNodeAction(const FCSDebug_DebugMenuNodeAction
 	mActionDelegate = InDelegate;
 }
 
+void CSDebug_DebugMenuNodeBase::Load(const FString& InValueString)
+{
+	SetValueString(InValueString);
+}
+
 void CSDebug_DebugMenuNodeBase::SetInitValue()
 {
 	if (!mNodeData.mInitValue.IsEmpty())
@@ -230,7 +235,7 @@ void CSDebug_DebugMenuNodeBase::SetValueList(const int32 InSelectIndex)
 
 void CSDebug_DebugMenuNodeBase::DrawValue(UCanvas* InCanvas, const FVector2D& InPos, const FLinearColor InColor) const
 {
-	FCanvasTextItem Item(InPos, FText::FromString(GetValueString()), GEngine->GetSmallFont(), InColor);
+	FCanvasTextItem Item(InPos, FText::FromString(GetDrawValueString()), GEngine->GetSmallFont(), InColor);
 	Item.Scale = FVector2D(1.f);
 	InCanvas->DrawItem(Item);
 }

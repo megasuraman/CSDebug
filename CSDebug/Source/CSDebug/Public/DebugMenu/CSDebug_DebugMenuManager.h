@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "DebugMenu/CSDebug_DebugMenuNodeBase.h"
+#include "DebugMenu/CSDebug_DebugMenuSave.h"
 #include "CSDebug_DebugMenuManager.generated.h"
 
 class CSDebug_DebugMenuNodeBase;
@@ -27,6 +28,7 @@ public:
 	void DebugDraw(UCanvas* InCanvas);
 	CSDebug_DebugMenuNodeBase* AddNode(const FString& InFolderPath, const FCSDebug_DebugMenuNodeData& InNodeData);
 	CSDebug_DebugMenuNodeBase* AddNode_Bool(const FString& InFolderPath, const FString& InDisplayName, const bool InInitValue);
+	CSDebug_DebugMenuNodeBase* AddNode_Button(const FString& InFolderPath, const FString& InDisplayName, const FCSDebug_DebugMenuNodeActionDelegate& InDelegate);
 	bool GetNodeValue_Bool(const FString& InPath) const;
 	void SetNodeActionDelegate(const FString& InPath, const FCSDebug_DebugMenuNodeActionDelegate& InDelegate);
 	void SetMainFolder(const FString& InPath);
@@ -35,14 +37,18 @@ public:
 	bool IsActive() const {return mbActive;}
 
 protected:
+	void SetupDefaultMenu();
 	void ClearNode();
 	APlayerController* FindPlayerController() const;
 	void ChangeSelectNode(const bool bInDown);
 	void DrawMainFolderPath(UCanvas* InCanvas, const FVector2D& InPos) const;
 	FFolder& FindOrAddFolder(const FString& InPath);
 	CSDebug_DebugMenuNodeBase* FindOrAddDebugMenuNodeFolder(const FString& InPath);
+	CSDebug_DebugMenuNodeBase* FindDebugMenuNode(const FString& InPath);
 	void AssignNodeToFolder(CSDebug_DebugMenuNodeBase* InNode);
 	FString CheckPathString(const FString& InPath) const;
+	void Save(const FCSDebug_DebugMenuNodeActionParameter& InParameter);
+	void Load(const FCSDebug_DebugMenuNodeActionParameter& InParameter);
 
 private:
 	struct FFolder
@@ -52,6 +58,7 @@ private:
 	};
 	TMap<FString, CSDebug_DebugMenuNodeBase*> mNodeMap;
 	TMap<FString, FFolder> mFolderMap;
+	FCSDebug_DebugMenuSaveData mSaveData;
 	FString mMainFolderPath;
 	FString mRootPath = FString(TEXT("~"));
 	CSDebug_DebugMenuNodeBase* mSelectNode = nullptr;

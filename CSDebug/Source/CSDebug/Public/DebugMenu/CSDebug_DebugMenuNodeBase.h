@@ -28,8 +28,9 @@ public:
 	virtual void OnJustPressedLeftKey() {}
 	virtual void OnJustPressedRightKey() {}
 	void Draw(UCanvas* InCanvas, const FVector2D& InPos, const bool bInSelect) const;
-	const FString& GetPath() const{return mPath;}
-	virtual FString GetValueString() const;
+	const FString& GetPath() const { return mPath; }
+	FString GetValueString() const { return mValueString; }
+	FString GetDrawValueString() const;
 	bool GetBool() const;
 	int32 GetInt() const;
 	float GetFloat() const;
@@ -37,6 +38,7 @@ public:
 	FString GetSelectString() const;
 	void SetNodeAction(const FCSDebug_DebugMenuNodeActionDelegate& InDelegate);
 	const FCSDebug_DebugMenuNodeData& GetNodeData() const{return mNodeData;}
+	void Load(const FString& InValueString);
 
 protected:
 	void SetValueString(const FString& InString){mValueString = InString;}

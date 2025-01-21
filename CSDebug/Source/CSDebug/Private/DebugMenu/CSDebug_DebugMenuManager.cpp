@@ -58,6 +58,8 @@ void UCSDebug_DebugMenuManager::Init()
 		}
 	}
 
+	SetupDefaultMenu();
+
 	SetMainFolder(mRootPath);
 }
 
@@ -215,6 +217,19 @@ CSDebug_DebugMenuNodeBase* UCSDebug_DebugMenuManager::AddNode_Bool(const FString
 	return AddNode(InFolderPath, NodeData);
 }
 
+CSDebug_DebugMenuNodeBase* UCSDebug_DebugMenuManager::AddNode_Button(const FString& InFolderPath, const FString& InDisplayName, const FCSDebug_DebugMenuNodeActionDelegate& InDelegate)
+{
+	FCSDebug_DebugMenuNodeData NodeData;
+	NodeData.mDisplayName = InDisplayName;
+	NodeData.mKind = ECSDebug_DebugMenuValueKind::Button;
+	if (CSDebug_DebugMenuNodeBase* DebugMenuNode = AddNode(InFolderPath, NodeData))
+	{
+		DebugMenuNode->SetNodeAction(InDelegate);
+		return DebugMenuNode;
+	}
+	return nullptr;
+}
+
 bool UCSDebug_DebugMenuManager::GetNodeValue_Bool(const FString& InPath) const
 {
 	const FString PathString = CheckPathString(InPath);
@@ -275,6 +290,19 @@ void UCSDebug_DebugMenuManager::BackMainFolder()
 void UCSDebug_DebugMenuManager::SetActive(const bool bInActive)
 {
 	mbActive = bInActive;
+}
+
+void UCSDebug_DebugMenuManager::SetupDefaultMenu()
+{
+	const FString BaseDebugMenuPath(TEXT("CSDebug/DebugMenu"));
+	{
+		const auto& Delegate = FCSDebug_DebugMenuNodeActionDelegate::CreateUObject(this, &UCSDebug_DebugMenuManager::Save);
+		AddNode_Button(BaseDebugMenuPath, FString(TEXT("Save")), Delegate);
+	}
+	{
+		const auto& Delegate = FCSDebug_DebugMenuNodeActionDelegate::CreateUObject(this, &UCSDebug_DebugMenuManager::Load);
+		AddNode_Button(BaseDebugMenuPath, FString(TEXT("Load")), Delegate);
+	}
 }
 
 void UCSDebug_DebugMenuManager::ClearNode()
@@ -416,6 +444,18 @@ CSDebug_DebugMenuNodeBase* UCSDebug_DebugMenuManager::FindOrAddDebugMenuNodeFold
 	return NodeFolder;
 }
 
+CSDebug_DebugMenuNodeBase* UCSDebug_DebugMenuManager::FindDebugMenuNode(const FString& InPath)
+{
+	if (CSDebug_DebugMenuNodeBase** NodePtr = mNodeMap.Find(InPath))
+	{
+		if (NodePtr != nullptr)
+		{
+			return *NodePtr;
+		}
+	}
+	return nullptr;
+}
+
 void UCSDebug_DebugMenuManager::AssignNodeToFolder(CSDebug_DebugMenuNodeBase* InNode)
 {
 	const FString NodePath = InNode->GetPath();
@@ -449,4 +489,36 @@ FString UCSDebug_DebugMenuManager::CheckPathString(const FString& InPath) const
 		PathString = mRootPath + FString(TEXT("/")) + PathString;
 	}
 	return PathString;
+}
+
+void UCSDebug_DebugMenuManager::Save(const FCSDebug_DebugMenuNodeActionParameter& InParameter)
+{
+	for (const auto& MapElement : mNodeMap)
+	{
+		const FString& Path = MapElement.Key;
+		if (const CSDebug_DebugMenuNodeBase* Node = MapElement.Value)
+		{
+			const FCSDebug_DebugMenuNodeData& NodeData = Node->GetNodeData();
+			if (NodeData.mKind == ECSDebug_DebugMenuValueKind::Button
+				|| NodeData.mKind == ECSDebug_DebugMenuValueKind::Folder)
+			{
+				continue;
+			}
+			const FString ValueString = Node->GetValueString();
+			mSaveData.WriteValue(Path, ValueString);
+		}
+	}
+	mSaveData.Save();
+}
+
+void UCSDebug_DebugMenuManager::Load(const FCSDebug_DebugMenuNodeActionParameter& InParameter)
+{
+	mSaveData.Load();
+	for (const auto& MapElement : mSaveData.GetValueMap())
+	{
+		if (CSDebug_DebugMenuNodeBase* Node = FindDebugMenuNode(MapElement.Key))
+		{
+			Node->Load(MapElement.Value);
+		}
+	}
 }
