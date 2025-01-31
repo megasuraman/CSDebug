@@ -1,7 +1,7 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebug_Subsystem.cpp
- * @brief CSDebug—p‚ÌSubsystem
+ * @brief CSDebug_Subsystem
  * @author SensyuGames
  * @date 2020/7/24
  */
@@ -22,10 +22,17 @@
 
 DEFINE_LOG_CATEGORY(CSDebugLog);
 
- /**
-  * @brief BP—p‚ÌGetter
-  */
+FCSDebug_SaveData UCSDebug_Subsystem::mSaveData;
 
+FCSDebug_SaveData& UCSDebug_Subsystem::sGetSaveData()
+{
+	mSaveData.Load();
+	return mSaveData;
+}
+
+/**
+ * @brief 
+ */
 UCSDebug_ScreenWindowManager* UCSDebug_Subsystem::GetScreenWindowManagerBP() const
 {
 #if USE_CSDEBUG
@@ -36,6 +43,7 @@ UCSDebug_ScreenWindowManager* UCSDebug_Subsystem::GetScreenWindowManagerBP() con
 }
 
 #if USE_CSDEBUG
+
 /**
  * @brief Initialize
  */
@@ -78,7 +86,7 @@ void	UCSDebug_Subsystem::Deinitialize()
 }
 
 /**
- * @brief	Tick“o˜^‚Ìon/off
+ * @brief	Tickのon/off
  */
 void	UCSDebug_Subsystem::RequestTick(const bool bInActive)
 {
@@ -96,7 +104,7 @@ void	UCSDebug_Subsystem::RequestTick(const bool bInActive)
 }
 
 /**
- * @brief	Draw“o˜^‚Ìon/off
+ * @brief	Drawのon/off
  */
 void	UCSDebug_Subsystem::RequestDraw(const bool bInActive)
 {

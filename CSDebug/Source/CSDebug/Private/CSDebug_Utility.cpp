@@ -116,7 +116,7 @@ FString UCSDebug_Utility::GetActorLevelName(const AActor* InActor)
 	{
 		return FString();
 	}
-	if (InActor->GetWorld()->IsEditorWorld())
+	if (InActor->GetWorld()->WorldType == EWorldType::Editor)
 	{
 		return GetActorLevelNameInEditor(InActor);
 	}
@@ -153,12 +153,16 @@ FString UCSDebug_Utility::GetActorLevelNameInEditor(const AActor* InActor)
 	{
 		return FString();
 	}
-	const ULevel* Level = InActor->GetLevel();
-	if (Level == nullptr)
+	return GetLevelName(InActor->GetLevel());
+}
+
+FString UCSDebug_Utility::GetLevelName(const ULevel* InLevel)
+{
+	if (InLevel == nullptr)
 	{
 		return FString();
 	}
-	const FString LevelPathName = Level->GetPathName();
+	const FString LevelPathName = InLevel->GetPathName();
 	TArray<FString> PathList;
 	LevelPathName.ParseIntoArray(PathList, TEXT("/"));
 	FString LastPath = LevelPathName;

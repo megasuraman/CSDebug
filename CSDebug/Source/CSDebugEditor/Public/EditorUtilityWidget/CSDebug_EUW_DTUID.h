@@ -9,7 +9,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorUtilityWidget.h"
+#include "EditorUtilityWidget/CSDebug_EUW_Base.h"
 #include "CSDebug_EUW_DTUID.generated.h"
 
 class UDataTable;
@@ -17,7 +17,7 @@ class UDataTable;
  * 
  */
 UCLASS()
-class CSDEBUGEDITOR_API UCSDebug_EUW_DTUID : public UEditorUtilityWidget
+class CSDEBUGEDITOR_API UCSDebug_EUW_DTUID : public UCSDebug_EUW_Base
 {
 	GENERATED_BODY()
 

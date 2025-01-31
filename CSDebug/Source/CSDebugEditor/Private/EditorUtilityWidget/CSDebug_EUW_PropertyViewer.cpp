@@ -26,30 +26,17 @@ UCSDebug_EUW_PropertyViewer::UCSDebug_EUW_PropertyViewer(const FObjectInitialize
 	: Super(ObjectInitializer)
 {
 }
-/* ------------------------------------------------------------
-   !プロパティの変化時
------------------------------------------------------------- */
+/**
+ * @brief	プロパティの変化時
+ */
 void UCSDebug_EUW_PropertyViewer::PostEditChangeProperty(FPropertyChangedEvent & PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 
-/* ------------------------------------------------------------
-   !World取得
------------------------------------------------------------- */
-UWorld*	UCSDebug_EUW_PropertyViewer::GetActiveWorld() const
-{
-	UWorld* World = FindWorld(EWorldType::PIE, false);
-	if (World == nullptr)
-	{
-		World = FindWorld(EWorldType::Editor, false);
-	}
-	return World;
-}
-
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 FString	UCSDebug_EUW_PropertyViewer::GetPropertyInfo(UObject* InTarget, UClass* InTargetClass)
 {
 	if (InTargetClass == nullptr)
@@ -103,9 +90,9 @@ FString	UCSDebug_EUW_PropertyViewer::GetPropertyInfo(UObject* InTarget, UClass* 
 
 	return DebugInfo;
 }
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 bool	UCSDebug_EUW_PropertyViewer::UpdatePropertyInfo(UObject* InTarget, UClass* InTargetClass)
 {
 	mPropertyInfo.Empty();
@@ -158,19 +145,15 @@ bool	UCSDebug_EUW_PropertyViewer::UpdatePropertyInfo(UObject* InTarget, UClass* 
 	return true;
 }
 
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 bool	UCSDebug_EUW_PropertyViewer::SetupTargetObjectList()
 {
 	mTargetObjectList.Empty();
 
-	UWorld* World = GetActiveWorld();
-	UWorld* SecondWorld = nullptr;
-	if (World->GetNetMode() != ENetMode::NM_DedicatedServer)
-	{
-		SecondWorld = FindWorld(EWorldType::PIE, true);
-	}
+	UWorld* World = GetWorld_GameServer();
+	UWorld* SecondWorld = GetWorld_GameClient();
 
 	TArray<UObject*> ObjectList;
 	GetObjectsOfClass(mTargetClass, ObjectList);
@@ -185,9 +168,9 @@ bool	UCSDebug_EUW_PropertyViewer::SetupTargetObjectList()
 
 	return mTargetObjectList.Num() > 0;
 }
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 FString	UCSDebug_EUW_PropertyViewer::GetDispObjectName(UObject* InTarget) const
 {
 	if (InTarget)
@@ -222,31 +205,16 @@ FString	UCSDebug_EUW_PropertyViewer::GetDispObjectName(UObject* InTarget) const
 	return FString(TEXT("None"));
 }
 
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 void	UCSDebug_EUW_PropertyViewer::SetUpdateRealTime(bool bInRealTime)
 {
-	if (bInRealTime)
-	{
-		if (!mDrawDelegateHandle.IsValid())
-		{
-			FDebugDrawDelegate DrawDebugDelegate = FDebugDrawDelegate::CreateUObject(this, &UCSDebug_EUW_PropertyViewer::Draw);
-			mDrawDelegateHandle = UDebugDrawService::Register(TEXT("GameplayDebug"), DrawDebugDelegate);
-		}
-	}
-	else
-	{
-		if (mDrawDelegateHandle.IsValid())
-		{
-			UDebugDrawService::Unregister(mDrawDelegateHandle);
-			mDrawDelegateHandle.Reset();
-		}
-	}
+	SetActiveDraw(bInRealTime);
 }
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
+/**
+ * @brief	
+ */
 void	UCSDebug_EUW_PropertyViewer::Clear()
 {
 	SetUpdateRealTime(false);
@@ -255,26 +223,26 @@ void	UCSDebug_EUW_PropertyViewer::Clear()
 	mTargetObject.Reset();
 }
 
-/* ------------------------------------------------------------
-   !Widget閉じたとき？
------------------------------------------------------------- */
+/**
+ * @brief	Widget閉じたとき？
+ */
 void	UCSDebug_EUW_PropertyViewer::NativeDestruct()
 {
 	Super::NativeDestruct();
 	SetUpdateRealTime(false);
 }
 
-/* ------------------------------------------------------------
-   !デバッグ表示
------------------------------------------------------------- */
-void	UCSDebug_EUW_PropertyViewer::Draw(UCanvas* InCanvas, APlayerController* InPlayerController)
+/**
+ * @brief
+ */
+void UCSDebug_EUW_PropertyViewer::FakeTick()
 {
 	UpdateRealTime();
 }
 
-/* ------------------------------------------------------------
-   !FKismetDebugUtilities::FindDebuggingData()を参考に情報抜き出し
------------------------------------------------------------- */
+/**
+ * @brief	FKismetDebugUtilities::FindDebuggingData()を参考に情報抜き出し
+ */
 bool UCSDebug_EUW_PropertyViewer::FindDebuggingData(UBlueprint* Blueprint, UObject* ActiveObject, FProperty* InProperty, void*& OutData)
 {
 	if (ActiveObject == nullptr
@@ -711,28 +679,4 @@ FString UCSDebug_EUW_PropertyViewer::GetDebugInfoInternal(FProperty* Property, c
 		return DebugValue;
 	}
 	return DebugValue;
-}
-
-/* ------------------------------------------------------------
-   !
------------------------------------------------------------- */
-UWorld* UCSDebug_EUW_PropertyViewer::FindWorld(const EWorldType::Type InType, const bool bInDGS) const
-{
-	const TIndirectArray<FWorldContext>& WorldContextList = GUnrealEd->GetWorldContexts();
-	//const TIndirectArray<FWorldContext>& WorldContextList = GEngine->GetWorldContexts();
-	for (auto& WorldContext : WorldContextList)
-	{
-		if (WorldContext.WorldType == InType)
-		{
-			UWorld* World = WorldContext.World();
-			if (bInDGS
-				&& !World->IsNetMode(NM_DedicatedServer))
-			{
-				return nullptr;
-			}
-			return World;
-		}
-	}
-
-	return nullptr;
 }

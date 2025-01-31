@@ -9,7 +9,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorUtilityWidget.h"
+#include "EditorUtilityWidget/CSDebug_EUW_Base.h"
 #include "CSDebug_EUW_CheckPlacedActor.generated.h"
 
 USTRUCT(BlueprintType)
@@ -22,7 +22,7 @@ struct CSDEBUGEDITOR_API FCSDebug_PlacedActorClassList
 };
 
 UCLASS()
-class CSDEBUGEDITOR_API UCSDebug_EUW_CheckPlacedActor : public UEditorUtilityWidget
+class CSDEBUGEDITOR_API UCSDebug_EUW_CheckPlacedActor : public UCSDebug_EUW_Base
 {
 	GENERATED_BODY()
 
@@ -34,7 +34,6 @@ public:
 
 protected:
 	bool CheckError_PossibleToPlaceActor();
-	FString GetLevelName(const ULevel* InLevel) const;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CheckPlacedActor")

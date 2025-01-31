@@ -38,7 +38,7 @@ public:
 	FString GetSelectString() const;
 	void SetNodeAction(const FCSDebug_DebugMenuNodeActionDelegate& InDelegate);
 	const FCSDebug_DebugMenuNodeData& GetNodeData() const{return mNodeData;}
-	void Load(const FString& InValueString);
+	void Load(const FString& InValueString, const FCSDebug_DebugMenuNodeActionParameter& InParameter);
 
 protected:
 	void SetValueString(const FString& InString){mValueString = InString;}

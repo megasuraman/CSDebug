@@ -8,7 +8,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorUtilityWidget.h"
+#include "EditorUtilityWidget/CSDebug_EUW_Base.h"
 #include "Engine/EngineTypes.h"
 #include "CSDebug_EUW_PropertyViewer.generated.h"
 
@@ -19,16 +19,13 @@ class APlayerController;
 DECLARE_DELEGATE_RetVal(FString, FPropertyWatchInfo)
 
 UCLASS()
-class CSDEBUGEDITOR_API UCSDebug_EUW_PropertyViewer : public UEditorUtilityWidget
+class CSDEBUGEDITOR_API UCSDebug_EUW_PropertyViewer : public UCSDebug_EUW_Base
 {
 	GENERATED_BODY()
 
 public:
 	UCSDebug_EUW_PropertyViewer(const FObjectInitializer& ObjectInitializer);
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	
-	UFUNCTION(BlueprintCallable, Category = "PropertyViewer")
-	UWorld* GetActiveWorld() const;
 	
 	UFUNCTION(BlueprintCallable, Category = "PropertyViewer")
 	FString	GetPropertyInfo(UObject* InTarget, UClass* InTargetClass);
@@ -53,14 +50,11 @@ public:
 	
 protected:
 	virtual void NativeDestruct() override;
-
-	void	Draw(UCanvas* InCanvas, APlayerController* InPlayerController);
+	virtual void FakeTick() override;
 
 	bool	FindDebuggingData(UBlueprint* Blueprint, UObject* ActiveObject, FProperty* InProperty, void*& OutData);
 	FString	GetDebugInfo_InContainer(int32 Index, FProperty* Property, const void* Data);
 	FString	GetDebugInfoInternal(FProperty* Property, const void* PropertyValue);
-
-	UWorld* FindWorld(const EWorldType::Type InType, const bool bInServer) const;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PropertyViewer")
@@ -73,6 +67,5 @@ protected:
 	TWeakObjectPtr<UObject> mTargetObject;
 
 private:
-	FDelegateHandle		mDrawDelegateHandle;
 	TMap<FName, FString>	mPropertyInfo;
 };

@@ -61,6 +61,13 @@ void UCSDebug_DebugMenuManager::Init()
 	SetupDefaultMenu();
 
 	SetMainFolder(mRootPath);
+
+
+	if (UCSDebug_Subsystem::sGetSaveData().GetBool(FString(TEXT("DebugMenu_AutoLoad"))))
+	{
+		Load(FCSDebug_DebugMenuNodeActionParameter());
+		mbDoneAutoLoad = true;
+	}
 }
 
 void UCSDebug_DebugMenuManager::DebugTick(const float InDeltaTime)
@@ -205,6 +212,14 @@ CSDebug_DebugMenuNodeBase* UCSDebug_DebugMenuManager::AddNode(const FString& InF
 	NewNode->Init(PathString, InNodeData, this);
 	mNodeMap.Add(NewNode->GetPath(), NewNode);
 	AssignNodeToFolder(NewNode);
+	if (mbDoneAutoLoad)
+	{
+		const FString SaveValue = mSaveData.GetValueString(NewNode->GetPath());
+		if(!SaveValue.IsEmpty())
+		{
+			NewNode->Load(SaveValue, FCSDebug_DebugMenuNodeActionParameter());
+		}
+	}
 	return NewNode;
 }
 
@@ -518,7 +533,7 @@ void UCSDebug_DebugMenuManager::Load(const FCSDebug_DebugMenuNodeActionParameter
 	{
 		if (CSDebug_DebugMenuNodeBase* Node = FindDebugMenuNode(MapElement.Key))
 		{
-			Node->Load(MapElement.Value);
+			Node->Load(MapElement.Value, InParameter);
 		}
 	}
 }

@@ -192,9 +192,10 @@ void CSDebug_DebugMenuNodeBase::SetNodeAction(const FCSDebug_DebugMenuNodeAction
 	mActionDelegate = InDelegate;
 }
 
-void CSDebug_DebugMenuNodeBase::Load(const FString& InValueString)
+void CSDebug_DebugMenuNodeBase::Load(const FString& InValueString, const FCSDebug_DebugMenuNodeActionParameter& InParameter)
 {
 	SetValueString(InValueString);
+	mActionDelegate.ExecuteIfBound(InParameter);
 }
 
 void CSDebug_DebugMenuNodeBase::SetInitValue()

@@ -63,4 +63,5 @@ private:
 	FString mRootPath = FString(TEXT("~"));
 	CSDebug_DebugMenuNodeBase* mSelectNode = nullptr;
 	bool mbActive = false;
+	bool mbDoneAutoLoad = false;
 };

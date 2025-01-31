@@ -31,4 +31,5 @@ public:
 	static FString GetActorLevelName(const AActor* InActor);
 	static FString GetActorLevelNameInGame(const AActor* InActor);
 	static FString GetActorLevelNameInEditor(const AActor* InActor);
+	static FString GetLevelName(const ULevel* InLevel);
 };

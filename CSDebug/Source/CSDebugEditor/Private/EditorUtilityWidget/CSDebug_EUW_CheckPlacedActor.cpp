@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Classes/GameFramework/Character.h"
 #include "Engine/Classes/GameFramework/WorldSettings.h"
+#include "CSDebug_Utility.h"
 
 /**
  * @brief	配置Actorのクラス情報をレベル別に格納
@@ -22,7 +23,7 @@ void UCSDebug_EUW_CheckPlacedActor::SetupPlacedActorClassMap()
 	const TArray<ULevel*>& Levels = GetWorld()->GetLevels();
 	for (ULevel* Level : Levels)
 	{
-		const FString LevelName = GetLevelName(Level);
+		const FString LevelName = UCSDebug_Utility::GetLevelName(Level);
 		FCSDebug_PlacedActorClassList& PlacedActorClassList = mPlacedActorClassMap.FindOrAdd(LevelName);
 		for (const AActor* Actor : Level->Actors)
 		{
@@ -69,7 +70,7 @@ bool UCSDebug_EUW_CheckPlacedActor::CheckError_PossibleToPlaceActor()
 
 		for (ULevel* Level : Levels)
 		{
-			const FString LevelName = GetLevelName(Level);
+			const FString LevelName = UCSDebug_Utility::GetLevelName(Level);
 			if (!LevelName.Contains(TargetLevelName))
 			{
 				continue;
@@ -107,23 +108,4 @@ bool UCSDebug_EUW_CheckPlacedActor::CheckError_PossibleToPlaceActor()
 		}
 	}
 	return bError;
-}
-
-/**
- * @brief	レベル名取得
- */
-FString UCSDebug_EUW_CheckPlacedActor::GetLevelName(const ULevel* InLevel) const
-{
-	const FString LevelPathName = InLevel->GetPathName();
-	TArray<FString> PathList;
-	LevelPathName.ParseIntoArray(PathList, TEXT("/"));
-	FString LastPath = LevelPathName;
-	if (PathList.Num() > 0)
-	{
-		LastPath = PathList[PathList.Num() - 1];
-	}
-	FString LevelName;
-	FString PersistantLevel;
-	LastPath.Split(FString(TEXT(".")), &LevelName, &PersistantLevel);
-	return LevelName;
 }

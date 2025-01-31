@@ -9,14 +9,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EditorUtilityWidget.h"
+#include "EditorUtilityWidget/CSDebug_EUW_Base.h"
 #include "CSDebug_EUW_ViewportHelper.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CSDEBUGEDITOR_API UCSDebug_EUW_ViewportHelper : public UEditorUtilityWidget
+class CSDEBUGEDITOR_API UCSDebug_EUW_ViewportHelper : public UCSDebug_EUW_Base
 {
 	GENERATED_BODY()
 
@@ -28,11 +28,8 @@ public:
 	void	RequestDraw(bool bInDraw);
 
 protected:
-	virtual void NativeDestruct() override;
-
-	void	Draw(UCanvas* InCanvas, APlayerController* InPlayerController);
+	virtual void Draw(UCanvas* InCanvas, APlayerController* InPlayerController) override;
 
 private:
 	FVector		mLastLookAtLocation = FVector::ZeroVector;
-	FDelegateHandle	mDebugDrawHandle;
 };

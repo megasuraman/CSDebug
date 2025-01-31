@@ -1,7 +1,7 @@
 // Copyright 2020 SensyuGames.
 /**
  * @file CSDebug_Subsystem.h
- * @brief CSDebug—p‚ÌSubsystem
+ * @brief CSDebug_Subsystem
  * @author SensyuGames
  * @date 2020/7/24
  */
@@ -9,6 +9,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "CSDebug_SaveData.h"
 #include "CSDebug_Subsystem.generated.h"
 
 class UCSDebug_ShortcutCommand;
@@ -28,6 +29,8 @@ class CSDEBUG_API UCSDebug_Subsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	static FCSDebug_SaveData& sGetSaveData();
+
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
@@ -67,4 +70,5 @@ private:
 	TWeakObjectPtr<AActor>	mOwner;
 	FDelegateHandle	mDebugTickHandle;
 	FDelegateHandle	mDebugDrawHandle;
+	static FCSDebug_SaveData mSaveData;
 };

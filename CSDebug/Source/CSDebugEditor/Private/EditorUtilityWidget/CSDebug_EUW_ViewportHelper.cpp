@@ -22,27 +22,9 @@
 void	UCSDebug_EUW_ViewportHelper::LookAt(const FString& InString)
 {
 	mLastLookAtLocation.InitFromString(InString);
-	if (GCurrentLevelEditingViewportClient != nullptr)
-	{
-		GCurrentLevelEditingViewportClient->SetViewLocation(mLastLookAtLocation + FVector(500.f));
-		GCurrentLevelEditingViewportClient->SetLookAtLocation(mLastLookAtLocation, true);
-	}
+	LookAtPos(mLastLookAtLocation);
 
-	if (GCurrentLevelEditingViewportClient)
-	{
-		GCurrentLevelEditingViewportClient->SetViewLocation(mLastLookAtLocation + FVector(500.f));
-		GCurrentLevelEditingViewportClient->SetLookAtLocation(mLastLookAtLocation, true);
-
-		//ViewportのRealTime表示を有効に
-		FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>("LevelEditor");
-		TSharedPtr<SLevelViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveLevelViewport();
-		if (ActiveLevelViewport.IsValid())
-		{
-			FLevelEditorViewportClient& LevelViewportClient = ActiveLevelViewport->GetLevelViewportClient();
-			LevelViewportClient.PopRealtimeOverride();
-			LevelViewportClient.SetRealtime(true);
-		}
-	}
+	SetRealTimeDraw_LevelEditorViewport(true);
 }
 
 /**
@@ -50,28 +32,7 @@ void	UCSDebug_EUW_ViewportHelper::LookAt(const FString& InString)
  */
 void	UCSDebug_EUW_ViewportHelper::RequestDraw(bool bInDraw)
 {
-	if (bInDraw
-		&& !mDebugDrawHandle.IsValid())
-	{
-		FDebugDrawDelegate DrawDebugDelegate = FDebugDrawDelegate::CreateUObject(this, &UCSDebug_EUW_ViewportHelper::Draw);
-		mDebugDrawHandle = UDebugDrawService::Register(TEXT("GameplayDebug"), DrawDebugDelegate);
-	}
-	else if (!bInDraw
-			&& mDebugDrawHandle.IsValid())
-	{
-		UDebugDrawService::Unregister(mDebugDrawHandle);
-		mDebugDrawHandle.Reset();
-	}
-}
-
-/**
- * @brief	Widget閉じたとき
- */
-void	UCSDebug_EUW_ViewportHelper::NativeDestruct()
-{
-	Super::NativeDestruct();
-
-	RequestDraw(false);
+	SetActiveDraw(bInDraw);
 }
 
 /**
@@ -79,6 +40,8 @@ void	UCSDebug_EUW_ViewportHelper::NativeDestruct()
  */
 void	UCSDebug_EUW_ViewportHelper::Draw(UCanvas* InCanvas, APlayerController* InPlayerController)
 {
+	Super::Draw(InCanvas, InPlayerController);
+
 	if (GCurrentLevelEditingViewportClient)
 	{
 		const FVector LookAtPos = GCurrentLevelEditingViewportClient->GetLookAtLocation();
