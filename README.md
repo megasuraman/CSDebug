@@ -7,3 +7,5 @@ https://sites.google.com/view/sensyumemo/csdebug
 
  Help Debug for Playing GamePad In UE4
 
+CSKitへ移行
+https://github.com/megasuraman/CSKit
